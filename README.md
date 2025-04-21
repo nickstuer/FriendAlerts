@@ -27,8 +27,8 @@ Displays a message in the chat when a Battle.net friend enters a new zone in Wor
 | :----------------------------------:  | :--------------------------------:  |
 | World Of Warcraft (Retail)            | Supported                           |
 | World Of Warcraft (Classic)           | Supported                           |
-| World of Warcraft (Classic Era)       | Supportedv                          |
-| Hearthstone                           | Unplanned                           |
+| World of Warcraft (Classic Era)       | Supported                           |
+| Hearthstone                           | Supported                           |
 
 
 ## 🛠 Install
@@ -39,7 +39,7 @@ Download from CurseForge or WoWUp.
 ## 🎮 Usage
 
 ### Slash Commands
-Use these commands to configure the addon:
+Use these commands to configure the addon
 ```
 /fa
 /friendalerts
@@ -51,6 +51,7 @@ Use these commands to configure the addon:
 Helpful links for developing or contributing to the addon.
 
 [Sound IDs](https://www.wowinterface.com/forums/showthread.php?t=55702)
+
 [BNGetFriendInfo](https://warcraft.wiki.gg/wiki/API_BNGetFriendInfo)
 
 
