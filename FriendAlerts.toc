@@ -5,7 +5,7 @@
 
 ## SavedVariables: FriendAlertsDB
 
-FriendAlerts.lua
-Options\MainUI.lua
-Options\ConfigUI.lua
-Options\SupportUI.lua
+src\Main.lua
+src\Options\MainUI.lua
+src\Options\ConfigUI.lua
+src\Options\SupportUI.lua
