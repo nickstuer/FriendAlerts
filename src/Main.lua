@@ -8,6 +8,8 @@ FR.friends = {};
 local defaults = {
 	enteringNewGames = true,
 	enteringNewAreas = true,
+	enteringNewGamesSound = true,
+	enteringNewAreasSound = false,
 	scanInterval = 3, -- in seconds
 }
 
@@ -15,9 +17,9 @@ FR.icons = {
 	["App"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-Battlenet:14:14:0:0:30:30|t",
 	["BSAp"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-Battlenet:14:14:0:0:30:30|t",
 	["WoW"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-WoW:14:14:0:0:30:30|t",
-	["Horde"] = "|TInterface\\Common\\icon-horde:20:20:0:0:30:30:5:25:0:30|t",
+	["Horde"] = "|TInterface\\Common\\icon-horde:20|t",
 	["Alliance"] = "|TInterface\\Common\\icon-alliance:20:20:0:0:30:30:5:25:0:30|t",
-	["Friend"] = "|TInterface\\FriendsFrame\\UI-Toast-FriendOnlineIcon:17:17:0:0:30:30:2:30:2:30|t", --:16:16:0:0:32:32:2:30:2:30|t",
+	["Friend"] = "|TInterface\\FriendsFrame\\UI-Toast-FriendOnlineIcon:17:17:0:0:30:30:2:30:2:30|t",
 	["WTCG"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-WTCG:16|t",
 };
 
@@ -74,7 +76,9 @@ FR.ScanFriends = function ()
 							end
 
 							FR.Alert(FR.icons["Friend"] .. string.format("%s is now playing %s (%s%s).", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game]), (FR.icons[factionName]), (slug)));
-							PlaySound(18019);
+							if FriendAlertsDB.settings.enteringNewGamesSound then
+								PlaySound(18019);
+							end
 
 							FR.friends[bnetIDAccount] = FR.friends[bnetIDAccount] or {};
 							FR.friends[bnetIDAccount]["game"] = game;
@@ -86,11 +90,9 @@ FR.ScanFriends = function ()
 								if not FR.icons[game] then
 									FR.Debug("Game: " .. game);
 								end
-								PlaySound(18019);
-								--FR.Debug("Last Online Time: " .. lastOnlineTime or "nil");
-
-								--FR.Debug("Friend Online Status: " .. tostring(isOnline));
-								
+								if FriendAlertsDB.settings.enteringNewGamesSound then
+									PlaySound(18019);
+								end								
 							end
 						end
 					end
@@ -105,7 +107,9 @@ FR.ScanFriends = function ()
 							end
 
 							FR.Alert(FR.icons["Friend"] .. string.format("%s %s%s has entered %s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (slug), (areaName)));
-							PlaySound(18019);
+							if FriendAlertsDB.settings.enteringNewAreasSound then
+								PlaySound(18019);
+							end
 						end
 					end
 				end
@@ -191,14 +195,4 @@ SLASH_FRIENDALERTS1 = "/fa"
 SLASH_FRIENDALERTS2 = "/friendalerts"
 SlashCmdList["FRIENDALERTS"] = function()
     Settings.OpenToCategory("FriendAlerts")
-	
-	-- Debugging
-	--local friendAccountInfo = C_BattleNet.GetFriendAccountInfo(1);
-	--local bnetIDAccount = friendAccountInfo.bnetAccountID;
-	--local accountName = friendAccountInfo.accountName;
-	--local game = "WoW";
-	--local slug = "Testing-Kel'Thuzad"
-	--local factionName = "Alliance";
-
-	--FR.Alert(FR.icons["Friend"] .. string.format("%s is now playing %s (%s%s).", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game]), (FR.icons[factionName]), (slug)));
 end

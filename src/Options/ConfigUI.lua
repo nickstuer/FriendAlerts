@@ -158,9 +158,45 @@ function ConfigUI:InitializeOptions()
     -- Add separator
     local _, newY = CreateSeparator(panel, 16, yPos)
     yPos = newY
+    
+      -- SECTION 1: General Options
+      local header, newY = CreateSectionHeader(panel, "Notification Sounds", 16, yPos)
+      yPos = newY - 5
+  
+      -- Enable checkbox
+      local _, newY = CreateCheckbox(
+          panel,
+          "FREnableCheckboxSounds",
+          "Friend Launched New Game",
+          30,
+          yPos,
+          FriendAlertsDB.settings.enteringNewGamesSound,
+          function(self)
+              FriendAlertsDB.settings.enteringNewGamesSound = self:GetChecked()
+          end
+      )
+      yPos = newY - 5
+  
+      -- Exclude guild members checkbox
+      local _, newY = CreateCheckbox(
+          panel,
+          "FRShowNewZonesCheckboxSounds",
+          "Friend Entered New Zone (WoW Only)",
+          30,
+          yPos,
+          FriendAlertsDB.settings.enteringNewAreasSound,
+          function(self)
+              FriendAlertsDB.settings.enteringNewAreasSound = self:GetChecked()
+          end
+      )
+      yPos = newY - 10
+  
+      -- Add separator
+      local _, newY = CreateSeparator(panel, 16, yPos)
+      yPos = newY
 
     -- SECTION 2: Notification Settings
-    local header, newY = CreateSectionHeader(panel, "Notification Settings", 16, yPos)
+    local header, newY = CreateSectionHeader(panel, "Scan Rate Settings", 16, yPos)
     yPos = newY - 5
 
     -- slider
