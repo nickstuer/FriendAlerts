@@ -1,0 +1,4 @@
+Sound Alerts: https://www.wowinterface.com/forums/showthread.php?t=55702
+
+
+LUA FriendInfo:  https://wowpedia.fandom.com/wiki/API_C_BattleNet.GetFriendAccountInfo
