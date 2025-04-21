@@ -12,13 +12,13 @@ local defaults = {
 }
 
 FR.icons = {
-	["App"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-Battlenet:14|t",
-	["BSAp"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-Battlenet:14|t",
-	["WoW"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-WoW:14|t",
-	["Horde"] = "|TInterface\\Common\\icon-horde:16|t",
-	["Alliance"] = "|TInterface\\Common\\icon-alliance:16|t",
-	["Friend"] = "|TInterface\\FriendsFrame\\UI-Toast-FriendOnlineIcon:16:16:0:0:32:32:2:30:2:30|t",
-	["WTCG"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-WTCG:14|t",
+	["App"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-Battlenet:14:14:0:0:30:30|t",
+	["BSAp"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-Battlenet:14:14:0:0:30:30|t",
+	["WoW"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-WoW:14:14:0:0:30:30|t",
+	["Horde"] = "|TInterface\\Common\\icon-horde:20:20:0:0:30:30:5:25:0:30|t",
+	["Alliance"] = "|TInterface\\Common\\icon-alliance:20:20:0:0:30:30:5:25:0:30|t",
+	["Friend"] = "|TInterface\\FriendsFrame\\UI-Toast-FriendOnlineIcon:17:17:0:0:30:30:2:30:2:30|t", --:16:16:0:0:32:32:2:30:2:30|t",
+	["WTCG"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-WTCG:16|t",
 };
 
 FR.games = {
@@ -54,18 +54,26 @@ FR.ScanFriends = function ()
 			if friendAccountInfo then
 				local bnetIDAccount = friendAccountInfo.bnetAccountID;
 				local accountName = friendAccountInfo.accountName;
+				local isOnline = friendAccountInfo.gameAccountInfo.isOnline or false;
 				local lastOnlineTime = friendAccountInfo.lastOnlineTime;
 				local game = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.clientProgram) or nil;
 				local areaName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.areaName) or "Unknown";
 				local characterName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.characterName) or "Unknown";
-				local realmName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.realmName) or "Unknown";
+				local realmName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.realmName) or nil;
 				local factionName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.factionName) or "Unknown";
 				
 				if game and FR.friends[bnetIDAccount] and FR.friends[bnetIDAccount]["game"] then
 
 					if game ~= FR.friends[bnetIDAccount]["game"] and FriendAlertsDB.settings.enteringNewGames then
-						if game == "WoW" then							
-							FR.Alert(FR.icons["Friend"] .. string.format("%s is now playing %s (%s%s-%s).", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game]), (FR.icons[factionName]), (characterName), (realmName)));
+						if game == "WoW" then
+							
+							local slug = characterName;
+
+							if realmName then
+								slug = slug .. "-" .. realmName;
+							end
+
+							FR.Alert(FR.icons["Friend"] .. string.format("%s is now playing %s (%s%s).", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game]), (FR.icons[factionName]), (slug)));
 							PlaySound(18019);
 
 							FR.friends[bnetIDAccount] = FR.friends[bnetIDAccount] or {};
@@ -73,13 +81,16 @@ FR.ScanFriends = function ()
 							FR.friends[bnetIDAccount]["areaName"] = areaName;
 
 						else
-							if game ~= nil then  -- Don't Alert if the change is that friend went offline (game ~= nil DOESNT WORK), trying game since LastOnlineTime doesn't return nil if online like it says it should.
+							if isOnline then  -- Don't Alert if the change is that friend went offline
 								FR.Alert( FR.icons["Friend"] .. string.format("%s is now playing %s%s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game] or ""), (FR.games[game] or "Unknown")));
 								if not FR.icons[game] then
 									FR.Debug("Game: " .. game);
 								end
 								PlaySound(18019);
-								FR.Debug("Last Online Time: " .. lastOnlineTime or "nil");
+								--FR.Debug("Last Online Time: " .. lastOnlineTime or "nil");
+
+								--FR.Debug("Friend Online Status: " .. tostring(isOnline));
+								
 							end
 						end
 					end
@@ -87,8 +98,13 @@ FR.ScanFriends = function ()
 					if game == "WoW" and FriendAlertsDB.settings.enteringNewAreas then
 						if areaName ~= FR.friends[bnetIDAccount]["areaName"] then
 							FR.friends[bnetIDAccount]["areaName"] = areaName;
+							local slug = characterName;
 
-							FR.Alert(FR.icons["Friend"] .. string.format( "%s %s%s-%s has entered %s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (characterName), (realmName), (areaName)));
+							if realmName then
+								slug = slug .. "-" .. realmName;
+							end
+
+							FR.Alert(FR.icons["Friend"] .. string.format("%s %s%s has entered %s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (slug), (areaName)));
 							PlaySound(18019);
 						end
 					end
@@ -175,4 +191,14 @@ SLASH_FRIENDALERTS1 = "/fa"
 SLASH_FRIENDALERTS2 = "/friendalerts"
 SlashCmdList["FRIENDALERTS"] = function()
     Settings.OpenToCategory("FriendAlerts")
+	
+	-- Debugging
+	--local friendAccountInfo = C_BattleNet.GetFriendAccountInfo(1);
+	--local bnetIDAccount = friendAccountInfo.bnetAccountID;
+	--local accountName = friendAccountInfo.accountName;
+	--local game = "WoW";
+	--local slug = "Testing-Kel'Thuzad"
+	--local factionName = "Alliance";
+
+	--FR.Alert(FR.icons["Friend"] .. string.format("%s is now playing %s (%s%s).", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game]), (FR.icons[factionName]), (slug)));
 end
