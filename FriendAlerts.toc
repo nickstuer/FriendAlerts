@@ -2,8 +2,11 @@
 ## Title: Friend Alerts
 ## Version: 1.0.0
 ## Author: Nick Stuer
+## IconTexture: Interface\AddOns\FriendAlerts\src\Media\Icon.tga
 
 ## SavedVariables: FriendAlertsDB
+
+## Category-enUS: Social
 
 src\Main.lua
 src\Options\MainUI.lua

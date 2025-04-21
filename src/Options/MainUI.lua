@@ -2,7 +2,7 @@ local addonName, FR = ...
 
 local ADDON_NAME = "FriendAlerts"
 local ADDON_ID = "FriendAlerts"
-local ICON_PATH = "Interface\\AddOns\\PeaversRemembersYou\\src\\Media\\Icon"
+local ICON_PATH = "Interface\\AddOns\\FriendAlerts\\src\\Media\\Icon"
 
 -- Initialize MainUI namespace
 local MainUI = {}

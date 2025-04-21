@@ -116,26 +116,26 @@ initFrame:RegisterEvent("PLAYER_LOGIN")
 initFrame:SetScript("OnEvent", function(self, event, arg1)
     if event == "ADDON_LOADED" and arg1 == addonName then
 
+		-- Initialize the database if it doesn't exist
 		if not FriendAlertsDB then
 			FriendAlertsDB = {
 				settings = CopyTable(defaults),
 			}
 		end
-	
-		-- Ensure all settings exist
+
 		for k, v in pairs(defaults) do
 			if FriendAlertsDB.settings[k] == nil then
 				FriendAlertsDB.settings[k] = v
 			end
 		end
 
-		-- Initialize configuration UI if available with a small delay
+		-- Initialize main options UI if available with a small delay
         C_Timer.After(0.2, function()
             if FR.MainUI and FR.MainUI.Initialize then
                 FR.MainUI:Initialize()
             end
 
-            -- Initialize support UI if available with a small delay
+            -- Initialize config UI if available with a small delay
             C_Timer.After(0.1, function()
                 if FR.ConfigUI and FR.ConfigUI.Initialize then
                     FR.ConfigUI:Initialize()
@@ -154,13 +154,13 @@ initFrame:SetScript("OnEvent", function(self, event, arg1)
 	end
 
 	if event == "PLAYER_LOGIN" then
-		C_Timer.After( 5, FR.ScanFriends );  -- Don't perform first scan until after 5 seconds.
+		C_Timer.After( 5, FR.ScanFriends );  -- Don't perform first scan until after 5 seconds
 		self:UnregisterEvent("PLAYER_LOGIN")
 	end
 end)
 
 
--- Print a loading message once PLAYER_ENTERING_WORLD fires
+-- Loading message when player enters the world
 local loadingFrame = CreateFrame("Frame")
 loadingFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 loadingFrame:SetScript("OnEvent", function(self, event)
@@ -170,7 +170,7 @@ loadingFrame:SetScript("OnEvent", function(self, event)
     end
 end)
 
-
+-- Slash Commands
 SLASH_FRIENDALERTS1 = "/fa"
 SLASH_FRIENDALERTS2 = "/friendalerts"
 SlashCmdList["FRIENDALERTS"] = function()
