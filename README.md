@@ -54,6 +54,11 @@ Helpful links for developing or contributing to the addon.
 
 [BNGetFriendInfo](https://warcraft.wiki.gg/wiki/API_BNGetFriendInfo)
 
+#### Deploy
+This copies the addon files to the appropriate World of Warcraft addons folder.
+MacOS: bash ./deploy.sh
+Windows: ./deploy.sh (via bash terminal)
+
 
 ## 🏆 Contributing
 
