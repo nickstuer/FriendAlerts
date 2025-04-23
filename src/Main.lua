@@ -155,18 +155,16 @@ initFrame:SetScript("OnEvent", function(self, event, arg1)
                 FR.AboutUI:Initialize()
             end
 
-            -- Initialize config UI if available with a small delay
             C_Timer.After(0.1, function()
                 if FR.OptionsUI and FR.OptionsUI.Initialize then
                     FR.OptionsUI:Initialize()
                 end
-            end)
 
-			-- Initialize support UI if available with a small delay
-            C_Timer.After(0.2, function()
-                if FR.SupportUI and FR.SupportUI.Initialize then
-                    FR.SupportUI:Initialize()
-                end
+				C_Timer.After(0.1, function()
+					if FR.SupportUI and FR.SupportUI.Initialize then
+						FR.SupportUI:Initialize()
+					end
+				end)
             end)
         end)
 
