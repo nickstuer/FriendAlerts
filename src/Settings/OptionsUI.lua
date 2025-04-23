@@ -1,7 +1,7 @@
 local _, FR = ...
 
-local ConfigUI = {}
-FR.ConfigUI = ConfigUI
+local OptionsUI = {}
+FR.OptionsUI = OptionsUI
 
 -- Helper functions for UI creation
 local function CreateSeparator(parent, xOffset, yPos, width)
@@ -99,10 +99,10 @@ local function CreateSlider(parent, name, label, min, max, step, defaultVal, xOf
     return slider, yPos - 50
 end
 
-function ConfigUI:InitializeOptions()
+function OptionsUI:InitializeOptions()
 
     local panel = CreateFrame("Frame")
-    panel.name = "Config"
+    panel.name = "Options"
 
 	local yPos = -16
 
@@ -237,8 +237,6 @@ function ConfigUI:InitializeOptions()
     FR.supportCategory = supportCategory
     FR.supportCategory.ID = panel.name
 
-
-
 	panel.OnRefresh = function()
 	end
 	panel.OnCommit = function()
@@ -249,6 +247,6 @@ function ConfigUI:InitializeOptions()
 	return panel
 end
 
-function ConfigUI:Initialize()
+function OptionsUI:Initialize()
 	self:InitializeOptions()
 end

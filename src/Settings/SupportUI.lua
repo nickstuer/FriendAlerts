@@ -2,28 +2,15 @@ local addonName, FR = ...
 
 local ADDON_NAME = "FriendAlerts"
 local ADDON_ID = "FriendAlerts"
-local ICON_PATH = "Interface\\AddOns\\FriendAlerts\\src\\Media\\Icon"
 
--- Initialize SupportUI namespace
 local SupportUI = {}
 FR.SupportUI = SupportUI
 
--- Constants
-local ICON_ALPHA = 0.1
-
--- Creates and initializes the support options panel
 function SupportUI:InitializeOptions()
     local panel = CreateFrame("Frame")
     panel.name = "Support"
 
-    -- Add background image
-    local largeIcon = panel:CreateTexture(nil, "BACKGROUND")
-    largeIcon:SetTexture(ICON_PATH)
-    largeIcon:SetPoint("TOPLEFT", panel, "TOPLEFT", 0, 0)
-    largeIcon:SetPoint("BOTTOMRIGHT", panel, "BOTTOMRIGHT", 0, 0)
-    largeIcon:SetAlpha(ICON_ALPHA)
-
-    -- Create header and description
+    -- header and description
     local titleText = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
     titleText:SetPoint("TOPLEFT", 16, -16)
     titleText:SetText("Support " .. ADDON_NAME)

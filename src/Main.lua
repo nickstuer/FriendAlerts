@@ -151,14 +151,14 @@ initFrame:SetScript("OnEvent", function(self, event, arg1)
 
 		-- Initialize main options UI if available with a small delay
         C_Timer.After(0.2, function()
-            if FR.MainUI and FR.MainUI.Initialize then
-                FR.MainUI:Initialize()
+            if FR.AboutUI and FR.AboutUI.Initialize then
+                FR.AboutUI:Initialize()
             end
 
             -- Initialize config UI if available with a small delay
             C_Timer.After(0.1, function()
-                if FR.ConfigUI and FR.ConfigUI.Initialize then
-                    FR.ConfigUI:Initialize()
+                if FR.OptionsUI and FR.OptionsUI.Initialize then
+                    FR.OptionsUI:Initialize()
                 end
             end)
 

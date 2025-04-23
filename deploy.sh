@@ -11,7 +11,7 @@ rm -vrf "$ADDON_PATH" | echo "$(wc -l) files deleted"
 mkdir -p "$ADDON_PATH"
 
 cp -R "src/Media" "${ADDON_PATH}/Media";
-cp -R "src/Options" "${ADDON_PATH}/Options";
+cp -R "src/Settings" "${ADDON_PATH}/Settings";
 cp -R "src/Main.lua" "${ADDON_PATH}/Main.lua";
 cp -R "src/FriendAlerts.toc" "${ADDON_PATH}/FriendAlerts.toc";
 cp -R "README.md" "${ADDON_PATH}/README.md";

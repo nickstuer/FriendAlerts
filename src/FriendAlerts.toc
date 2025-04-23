@@ -9,6 +9,6 @@
 ## Category-enUS: Social
 
 Main.lua
-Options\MainUI.lua
-Options\ConfigUI.lua
-Options\SupportUI.lua
+Settings\AboutUI.lua
+Settings\OptionsUI.lua
+Settings\SupportUI.lua
