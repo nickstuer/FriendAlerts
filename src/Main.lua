@@ -1,6 +1,6 @@
 local addonName, FR = ...;
 
-FR.version = "1.1.0";
+FR.version = "1.2.0";
 FR.addonName = addonName;
 FR.friends = {};
 FR.localFriends = {};
@@ -10,6 +10,7 @@ local defaults = {
 	enteringNewGames = true,
 	enteringNewAreas = false,
 	enteringNewAreasLocalFriends = false,
+	favoritesOnly = false,
 	enteringNewGamesSound = true,
 	enteringNewAreasSound = false,
 	scanInterval = 3, -- in seconds
@@ -23,6 +24,8 @@ FR.icons = {
 	["Alliance"] = "|TInterface\\Common\\icon-alliance:20:20:0:0:30:30:5:25:0:30|t",
 	["Friend"] = "|TInterface\\FriendsFrame\\UI-Toast-FriendOnlineIcon:17:17:0:0:30:30:2:30:2:30|t",
 	["WTCG"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-WTCG:16|t",
+	["Hero"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-HotS:16|t",
+	["Pro"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-Overwatch:16|t",
 };
 
 FR.games = {
@@ -30,6 +33,8 @@ FR.games = {
 	["BSAp"] = "Mobile",
 	["WoW"] = "World of Warcraft",
 	["WTCG"] = "Hearthstone",
+	["Hero"] = "Heroes of the Storm",
+	["Pro"] = "Overwatch",
 };
 
 FR.WhisperLink = function (accountName, bnetIDAccount)
@@ -97,6 +102,7 @@ FR.ScanFriends = function ()
 				local characterName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.characterName) or "Unknown";
 				local realmName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.realmName) or nil;
 				local factionName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.factionName) or "Unknown";
+				local isFavorite = friendAccountInfo.isFavorite or false;
 				
 				if game and FR.friends[bnetIDAccount] and FR.friends[bnetIDAccount]["game"] then
 
@@ -108,10 +114,14 @@ FR.ScanFriends = function ()
 							if realmName then
 								slug = slug .. "-" .. realmName;
 							end
-
-							FR.Alert(FR.icons["Friend"] .. string.format("%s is now playing %s (%s%s).", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game]), (FR.icons[factionName]), (slug)));
+							
+							if (FriendAlertsDB.settings.favoritesOnly and isFavorite) or (not FriendAlertsDB.settings.favoritesOnly) then
+								FR.Alert(FR.icons["Friend"] .. string.format("%s is now playing %s (%s%s).", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game]), (FR.icons[factionName]), (slug)));
+							end
 							if FriendAlertsDB.settings.enteringNewGamesSound then
-								PlaySound(18019);
+								if (FriendAlertsDB.settings.favoritesOnly and isFavorite) or (not FriendAlertsDB.settings.favoritesOnly) then
+									PlaySound(18019);
+								end
 							end
 
 							FR.friends[bnetIDAccount] = FR.friends[bnetIDAccount] or {};
@@ -120,13 +130,17 @@ FR.ScanFriends = function ()
 
 						else
 							if isOnline then  -- Don't Alert if the change is that friend went offline
-								FR.Alert( FR.icons["Friend"] .. string.format("%s is now playing %s%s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game] or ""), (FR.games[game] or "Unknown")));
+								if (FriendAlertsDB.settings.favoritesOnly and isFavorite) or (not FriendAlertsDB.settings.favoritesOnly) then
+									FR.Alert( FR.icons["Friend"] .. string.format("%s is now playing %s%s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game] or ""), (FR.games[game] or "Unknown")));
+								end
 								if not FR.icons[game] then
 									FR.Debug("Game: " .. game);
 								end
-								if FriendAlertsDB.settings.enteringNewGamesSound then
-									PlaySound(18019);
-								end								
+								if (FriendAlertsDB.settings.favoritesOnly and isFavorite) or (not FriendAlertsDB.settings.favoritesOnly) then
+									if FriendAlertsDB.settings.enteringNewGamesSound then
+										PlaySound(18019);
+									end
+								end					
 							end
 						end
 					end
@@ -139,10 +153,14 @@ FR.ScanFriends = function ()
 							if realmName then
 								slug = slug .. "-" .. realmName;
 							end
-
-							FR.Alert(FR.icons["Friend"] .. string.format("%s %s%s has entered %s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (slug), (areaName)));
-							if FriendAlertsDB.settings.enteringNewAreasSound then
-								PlaySound(18019);
+							
+							if (FriendAlertsDB.settings.favoritesOnly and isFavorite) or (not FriendAlertsDB.settings.favoritesOnly) then
+								FR.Alert(FR.icons["Friend"] .. string.format("%s %s%s has entered %s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (slug), (areaName)));
+							end
+							if (FriendAlertsDB.settings.favoritesOnly and isFavorite) or (not FriendAlertsDB.settings.favoritesOnly) then
+								if FriendAlertsDB.settings.enteringNewAreasSound then
+									PlaySound(18019);
+								end
 							end
 						end
 					end

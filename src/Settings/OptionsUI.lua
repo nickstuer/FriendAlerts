@@ -131,7 +131,7 @@ function OptionsUI:InitializeOptions()
     local _, newY = CreateCheckbox(
         panel,
         "FREnableCheckbox",
-        "Friend Launched New Game",
+        "Battle.net Friend Launches New Game",
         30,
         yPos,
         FriendAlertsDB.settings.enteringNewGames,
@@ -145,7 +145,7 @@ function OptionsUI:InitializeOptions()
     local _, newY = CreateCheckbox(
         panel,
         "FRShowNewZonesCheckbox",
-        "Friend Entered New Zone (WoW Only)",
+        "Battle.net Friend Enters New WoW Zone",
         30,
         yPos,
         FriendAlertsDB.settings.enteringNewAreas,
@@ -155,11 +155,25 @@ function OptionsUI:InitializeOptions()
     )
     yPos = newY - 5
 
-     -- Exclude guild members checkbox
-     local _, newY = CreateCheckbox(
+    -- Exclude guild members checkbox
+    local _, newY = CreateCheckbox(
+        panel,
+        "FRShowNewZonesCheckboxFavorites",
+        "Only Notifications for Battle.net Favorites",
+        30,
+        yPos,
+        FriendAlertsDB.settings.favoritesOnly,
+        function(self)
+            FriendAlertsDB.settings.favoritesOnly = self:GetChecked()
+        end
+    )
+    yPos = newY - 5
+
+    -- Exclude guild members checkbox
+    local _, newY = CreateCheckbox(
         panel,
         "FRShowNewZonesCheckboxCharacterFriend",
-        "Character Friend Entered New Zone",
+        "Character Friend Enters New Zone",
         30,
         yPos,
         FriendAlertsDB.settings.enteringNewAreasLocalFriends,
@@ -181,7 +195,7 @@ function OptionsUI:InitializeOptions()
       local _, newY = CreateCheckbox(
           panel,
           "FREnableCheckboxSounds",
-          "Friend Launched New Game",
+          "Battle.net Friend Launches New Game",
           30,
           yPos,
           FriendAlertsDB.settings.enteringNewGamesSound,
@@ -195,7 +209,7 @@ function OptionsUI:InitializeOptions()
       local _, newY = CreateCheckbox(
           panel,
           "FRShowNewZonesCheckboxSounds",
-          "Friend Entered New Zone (WoW Only)",
+          "Friend Enters New WoW Zone",
           30,
           yPos,
           FriendAlertsDB.settings.enteringNewAreasSound,
