@@ -153,6 +153,20 @@ function OptionsUI:InitializeOptions()
             FriendAlertsDB.settings.enteringNewAreas = self:GetChecked()
         end
     )
+    yPos = newY - 5
+
+     -- Exclude guild members checkbox
+     local _, newY = CreateCheckbox(
+        panel,
+        "FRShowNewZonesCheckboxCharacterFriend",
+        "Character Friend Entered New Zone",
+        30,
+        yPos,
+        FriendAlertsDB.settings.enteringNewAreasLocalFriends,
+        function(self)
+            FriendAlertsDB.settings.enteringNewAreasLocalFriends = self:GetChecked()
+        end
+    )
     yPos = newY - 10
 
     -- Add separator

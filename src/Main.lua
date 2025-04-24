@@ -3,11 +3,13 @@ local addonName, FR = ...;
 FR.version = "1.0.1";
 FR.addonName = addonName;
 FR.friends = {};
+FR.localFriends = {};
 
 -- Default settings
 local defaults = {
 	enteringNewGames = true,
-	enteringNewAreas = true,
+	enteringNewAreas = false,
+	enteringNewAreasLocalFriends = false,
 	enteringNewGamesSound = true,
 	enteringNewAreasSound = false,
 	scanInterval = 3, -- in seconds
@@ -36,7 +38,7 @@ end
 
 FR.Alert = function(text)
 	local ChatFrame = DEFAULT_CHAT_FRAME;
-	ChatFrame:AddMessage(text, BATTLENET_FONT_COLOR["r"], BATTLENET_FONT_COLOR["g"], BATTLENET_FONT_COLOR["b"] );
+	ChatFrame:AddMessage(text, BATTLENET_FONT_COLOR["r"], BATTLENET_FONT_COLOR["g"], BATTLENET_FONT_COLOR["b"]);
 end
 
 FR.Print = function(text)
@@ -45,6 +47,38 @@ end
 
 FR.Debug = function(text)
 	print("|cff33ff99DEBUG|r: " .. text);
+end
+
+FR.ScanFriends2 = function ()
+	numberOfFriends = C_FriendList.GetNumFriends();
+	--FR.Debug("Number of Friends: " .. numberOfFriends);
+
+	for index = 1, numberOfFriends do
+
+		local friendInfo = C_FriendList.GetFriendInfoByIndex(index);
+		local isOnline = friendInfo.connected;
+		local characterName = friendInfo.name;
+		local areaName = friendInfo.area;
+
+		if isOnline and characterName then
+			--DevTools_Dump(friendInfo);
+
+			if FR.localFriends[characterName] then
+				if FR.localFriends[characterName]["area"] ~= areaName then
+					if FriendAlertsDB.settings.enteringNewAreasLocalFriends then
+						FR.Alert(string.format("|cffffff00%s has entered %s.", characterName, areaName));
+						if FriendAlertsDB.settings.enteringNewAreasSound then
+							PlaySound(18019);
+						end
+					end
+				end
+			end
+			FR.localFriends[characterName] = friendInfo or {};
+			FR.localFriends[characterName]["area"] = areaName;
+		end
+	end
+
+	C_Timer.After(FriendAlertsDB.settings.scanInterval, FR.ScanFriends2);
 end
 
 FR.ScanFriends = function ()
@@ -172,7 +206,8 @@ initFrame:SetScript("OnEvent", function(self, event, arg1)
 	end
 
 	if event == "PLAYER_LOGIN" then
-		C_Timer.After( 5, FR.ScanFriends );  -- Don't perform first scan until after 5 seconds
+		C_Timer.After(4, FR.ScanFriends2);
+		C_Timer.After(5, FR.ScanFriends);  -- Don't perform first scan until after 5 seconds
 		self:UnregisterEvent("PLAYER_LOGIN")
 	end
 end)
