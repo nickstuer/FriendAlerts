@@ -1,6 +1,6 @@
 local addonName, FR = ...;
 
-FR.version = "1.0.1";
+FR.version = "1.1.0";
 FR.addonName = addonName;
 FR.friends = {};
 FR.localFriends = {};
