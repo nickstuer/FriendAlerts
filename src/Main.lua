@@ -4,12 +4,14 @@ FR.version = "1.2.0";
 FR.addonName = addonName;
 FR.friends = {};
 FR.localFriends = {};
+FR.guildMembers = {};
 
 -- Default settings
 local defaults = {
 	enteringNewGames = true,
 	enteringNewAreas = false,
 	enteringNewAreasLocalFriends = false,
+	enteringNewAreasGuildMembers = false,
 	favoritesOnly = false,
 	enteringNewGamesSound = true,
 	enteringNewAreasSound = false,
@@ -61,26 +63,45 @@ FR.ScanFriends2 = function ()
 	for index = 1, numberOfFriends do
 
 		local friendInfo = C_FriendList.GetFriendInfoByIndex(index);
-		local isOnline = friendInfo.connected;
-		local characterName = friendInfo.name;
-		local areaName = friendInfo.area;
+		local isOnline = friendInfo.connected or nil;
+		local characterName = friendInfo.name or nil;
+		local areaName = friendInfo.area or nil;
 
 		if isOnline and characterName then
 			--DevTools_Dump(friendInfo);
 
 			if FR.localFriends[characterName] then
-				if FR.localFriends[characterName]["area"] ~= areaName then
-					if FriendAlertsDB.settings.enteringNewAreasLocalFriends then
-						FR.Alert(string.format("|cffffff00%s has entered %s.", characterName, areaName));
-						if FriendAlertsDB.settings.enteringNewAreasSound then
-							PlaySound(18019);
-						end
+				if FR.localFriends[characterName]["area"] ~= areaName and FriendAlertsDB.settings.enteringNewAreasLocalFriends then
+					FR.Alert(string.format("|cffffff00%s has entered %s.", characterName, areaName));
+					if FriendAlertsDB.settings.enteringNewAreasSound then
+						PlaySound(18019);
 					end
 				end
 			end
 			FR.localFriends[characterName] = friendInfo or {};
 			FR.localFriends[characterName]["area"] = areaName;
 		end
+	end
+
+	C_GuildInfo.GuildRoster();
+	numTotal, numOnline = GetNumGuildMembers();
+
+	for index = 1, numTotal do
+		local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile, isSoREligible, standingID = GetGuildRosterInfo(index);
+
+		if online and FR.guildMembers[name] then
+			if zone ~= FR.guildMembers[name]["zone"] then
+				if FriendAlertsDB.settings.enteringNewAreasGuildMembers then
+					FR.Alert(string.format("|cffffff00%s has entered %s.", name, zone));
+					if FriendAlertsDB.settings.enteringNewAreasSound then
+						PlaySound(18019);
+					end
+				end
+			end
+		end
+
+		FR.guildMembers[name] = FR.guildMembers[name] or {};
+		FR.guildMembers[name]["zone"] = zone;
 	end
 
 	C_Timer.After(FriendAlertsDB.settings.scanInterval, FR.ScanFriends2);
