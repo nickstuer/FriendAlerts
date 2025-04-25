@@ -131,7 +131,7 @@ function OptionsUI:InitializeOptions()
     local _, newY = CreateCheckbox(
         panel,
         "FREnableCheckbox",
-        "Battle.net Friend Launches New Game",
+        "Battle.net Friend Launches New Game or Changes WoW Character",
         30,
         yPos,
         FriendAlertsDB.settings.enteringNewGames,
