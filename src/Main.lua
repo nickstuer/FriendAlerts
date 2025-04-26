@@ -89,7 +89,7 @@ FR.ScanFriends2 = function ()
 	for index = 1, numTotal do
 		local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile, isSoREligible, standingID = GetGuildRosterInfo(index);
 
-		if online and FR.guildMembers[name] then
+		if name and online and FR.guildMembers[name] then
 			if zone ~= FR.guildMembers[name]["zone"] then
 				if FriendAlertsDB.settings.enteringNewAreasGuildMembers then
 					FR.Alert(string.format("|cffffff00%s has entered %s.", name, zone));
@@ -100,8 +100,10 @@ FR.ScanFriends2 = function ()
 			end
 		end
 
-		FR.guildMembers[name] = FR.guildMembers[name] or {};
-		FR.guildMembers[name]["zone"] = zone;
+		if name then
+			FR.guildMembers[name] = FR.guildMembers[name] or {};
+			FR.guildMembers[name]["zone"] = zone;
+		end
 	end
 
 	C_Timer.After(FriendAlertsDB.settings.scanInterval, FR.ScanFriends2);
