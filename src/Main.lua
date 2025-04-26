@@ -60,49 +60,53 @@ FR.ScanFriends2 = function ()
 	numberOfFriends = C_FriendList.GetNumFriends();
 	--FR.Debug("Number of Friends: " .. numberOfFriends);
 
-	for index = 1, numberOfFriends do
+	if FriendAlertsDB.settings.enteringNewAreasLocalFriends then
+		for index = 1, numberOfFriends do
 
-		local friendInfo = C_FriendList.GetFriendInfoByIndex(index);
-		local isOnline = friendInfo.connected or nil;
-		local characterName = friendInfo.name or nil;
-		local areaName = friendInfo.area or nil;
+			local friendInfo = C_FriendList.GetFriendInfoByIndex(index);
+			local isOnline = friendInfo.connected or nil;
+			local characterName = friendInfo.name or nil;
+			local areaName = friendInfo.area or nil;
 
-		if isOnline and characterName then
-			--DevTools_Dump(friendInfo);
+			if isOnline and characterName then
+				--DevTools_Dump(friendInfo);
 
-			if FR.localFriends[characterName] then
-				if FR.localFriends[characterName]["area"] ~= areaName and FriendAlertsDB.settings.enteringNewAreasLocalFriends then
-					FR.Alert(string.format("|cffffff00%s has entered %s.", characterName, areaName));
-					if FriendAlertsDB.settings.enteringNewAreasSound then
-						PlaySound(18019);
+				if FR.localFriends[characterName] then
+					if FR.localFriends[characterName]["area"] ~= areaName and FriendAlertsDB.settings.enteringNewAreasLocalFriends then
+						FR.Alert(string.format("|cffffff00%s has entered %s.", characterName, areaName));
+						if FriendAlertsDB.settings.enteringNewAreasSound then
+							PlaySound(18019);
+						end
 					end
 				end
+				FR.localFriends[characterName] = friendInfo or {};
+				FR.localFriends[characterName]["area"] = areaName;
 			end
-			FR.localFriends[characterName] = friendInfo or {};
-			FR.localFriends[characterName]["area"] = areaName;
 		end
 	end
 
-	C_GuildInfo.GuildRoster();
-	numTotal, numOnline = GetNumGuildMembers();
+	if FriendAlertsDB.settings.enteringNewAreasGuildMembers then
+		C_GuildInfo.GuildRoster();
+		numTotal, numOnline = GetNumGuildMembers();
 
-	for index = 1, numTotal do
-		local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile, isSoREligible, standingID = GetGuildRosterInfo(index);
+		for index = 1, numTotal do
+			local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile, isSoREligible, standingID = GetGuildRosterInfo(index);
 
-		if name and online and FR.guildMembers[name] then
-			if zone ~= FR.guildMembers[name]["zone"] then
-				if FriendAlertsDB.settings.enteringNewAreasGuildMembers then
-					FR.Alert(string.format("|cffffff00%s has entered %s.", name, zone));
-					if FriendAlertsDB.settings.enteringNewAreasSound then
-						PlaySound(18019);
+			if name and online and FR.guildMembers[name] then
+				if zone ~= FR.guildMembers[name]["zone"] then
+					if FriendAlertsDB.settings.enteringNewAreasGuildMembers then
+						FR.Alert(string.format("|cffffff00%s has entered %s.", name, zone));
+						if FriendAlertsDB.settings.enteringNewAreasSound then
+							PlaySound(18019);
+						end
 					end
 				end
 			end
-		end
 
-		if name then
-			FR.guildMembers[name] = FR.guildMembers[name] or {};
-			FR.guildMembers[name]["zone"] = zone;
+			if name then
+				FR.guildMembers[name] = FR.guildMembers[name] or {};
+				FR.guildMembers[name]["zone"] = zone;
+			end
 		end
 	end
 
