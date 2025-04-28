@@ -147,7 +147,8 @@ FR.ScanFriends = function ()
 							end
 							if FriendAlertsDB.settings.enteringNewGamesSound then
 								if (FriendAlertsDB.settings.favoritesOnly and isFavorite) or (not FriendAlertsDB.settings.favoritesOnly) then
-									PlaySound(18019);
+									--PlaySound(18019);
+									PlaySound(110981);
 								end
 							end
 
