@@ -56,6 +56,10 @@ Helpful links for developing or contributing to the addon.
 
 [Sounds](https://www.wowhead.com/sounds)
 
+[Icon String Format](https://www.wowinterface.com/forums/showthread.php?t=46221)
+
+[Chat Icons](https://wago.tools/files?search=chaticon)
+
 #### Deploy
 This copies the addon files to the appropriate World of Warcraft addons folder.
 MacOS: bash ./deploy.sh
