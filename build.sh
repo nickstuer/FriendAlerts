@@ -12,6 +12,7 @@ mkdir -p $"${BUILD_DIRECTORY}/temp/FriendAlerts"
 
 cp -R "src/Media" "${BUILD_DIRECTORY}/temp/FriendAlerts/Media";
 cp -R "src/Settings" "${BUILD_DIRECTORY}/temp/FriendAlerts/Options";
+cp -R "src/Core" "${BUILD_DIRECTORY}/temp/FriendAlerts/Core";
 cp -R "src/Main.lua" "${BUILD_DIRECTORY}/temp/FriendAlerts/Main.lua";
 cp -R "src/FriendAlerts.toc" "${BUILD_DIRECTORY}/temp/FriendAlerts/FriendAlerts.toc";
 cp -R "README.md" "${BUILD_DIRECTORY}/temp/FriendAlerts/README.md";

@@ -8,7 +8,10 @@
 
 ## Category-enUS: Social
 
-Main.lua
+Core\Config.lua
+Core\Utils.lua
 Settings\AboutUI.lua
 Settings\OptionsUI.lua
 Settings\SupportUI.lua
+
+Main.lua

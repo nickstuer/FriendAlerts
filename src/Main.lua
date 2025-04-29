@@ -1,5 +1,8 @@
 local addonName, FR = ...;
 
+local Utils = FR.Utils or {}
+FR.Utils = Utils
+
 FR.version = "1.2.0";
 FR.addonName = addonName;
 FR.friends = {};
@@ -40,6 +43,16 @@ FR.games = {
 	["Pro"] = "Overwatch",
 };
 
+--wowProjectID
+FR.WoWVersions = {
+	[1] = "Retail WoW",
+	[2] = "Classic WoW",
+	[3] = "Plunderstorm",
+	[5] = "BC Classic",
+	[11] = "Wrath Classic",
+	[14] = "Cata Classic",
+};
+
 FR.WhisperLink = function (accountName, bnetIDAccount)
 	return string.format("|HBNplayer:%s:%s|h[%s]|h", accountName, bnetIDAccount, accountName);
 end
@@ -47,14 +60,6 @@ end
 FR.Alert = function(text)
 	local ChatFrame = DEFAULT_CHAT_FRAME;
 	ChatFrame:AddMessage(text, BATTLENET_FONT_COLOR["r"], BATTLENET_FONT_COLOR["g"], BATTLENET_FONT_COLOR["b"]);
-end
-
-FR.Print = function(text)
-	print("|cff33ff99" .. FR.addonName .. "|r: " .. text);
-end
-
-FR.Debug = function(text)
-	print("|cff33ff99DEBUG|r: " .. text);
 end
 
 FR.ScanFriends2 = function ()
@@ -114,6 +119,14 @@ FR.ScanFriends2 = function ()
 	C_Timer.After(FriendAlertsDB.settings.scanInterval, FR.ScanFriends2);
 end
 
+-- Classic Example:
+--.gameAccountInfo:
+-- clientProgram = "WoW"
+-- className = "Rogue"
+-- richPresence="WoW Classic Anniversary - Nightslayer"
+-- characterLevel = 6
+-- realmID=6104 (Nightslayer)
+
 FR.ScanFriends = function ()
 	if BNConnected() then
 		--print ("Scanning Friends...");
@@ -131,6 +144,8 @@ FR.ScanFriends = function ()
 				local realmName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.realmName) or nil;
 				local factionName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.factionName) or "Unknown";
 				local isFavorite = friendAccountInfo.isFavorite or false;
+
+				local gameAccountID = friendAccountInfo.gameAccountInfo.wowProjectID or nil;
 				
 				if game and FR.friends[bnetIDAccount] and FR.friends[bnetIDAccount]["game"] then
 
@@ -163,7 +178,7 @@ FR.ScanFriends = function ()
 									FR.Alert( FR.icons["Friend"] .. string.format("%s is now playing %s%s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game] or ""), (FR.games[game] or "Unknown")));
 								end
 								if not FR.icons[game] then
-									FR.Debug("Game: " .. game);
+									Utilities.Debug("Game: " .. game);
 								end
 								if (FriendAlertsDB.settings.favoritesOnly and isFavorite) or (not FriendAlertsDB.settings.favoritesOnly) then
 									if FriendAlertsDB.settings.enteringNewGamesSound then
@@ -185,6 +200,11 @@ FR.ScanFriends = function ()
 							
 							if (FriendAlertsDB.settings.favoritesOnly and isFavorite) or (not FriendAlertsDB.settings.favoritesOnly) then
 								FR.Alert(FR.icons["Friend"] .. string.format("%s %s%s has entered %s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (slug), (areaName)));
+								
+								local game = FR.WoWVersions[gameAccountID] or "Unknown";
+
+								Utils.Debug("Game: " .. game .. " | GameAccountID: " .. gameAccountID);
+							
 							end
 							if (FriendAlertsDB.settings.favoritesOnly and isFavorite) or (not FriendAlertsDB.settings.favoritesOnly) then
 								if FriendAlertsDB.settings.enteringNewAreasSound then
@@ -265,7 +285,8 @@ local loadingFrame = CreateFrame("Frame")
 loadingFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 loadingFrame:SetScript("OnEvent", function(self, event)
     if event == "PLAYER_ENTERING_WORLD" then
-        FR.Print("Addon Loaded.")
+        Utils.Print("Addon Loaded.")
+		Utils.Debug("Testing");
         self:UnregisterEvent("PLAYER_ENTERING_WORLD")
     end
 end)
