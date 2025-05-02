@@ -1,9 +1,9 @@
 # FriendAlerts
 <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues/nickstuer/friendalerts">
 
-[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/nickstuer/FriendAlerts)](https://github.com/nickstuer/FriendAlerts/commits/master) [![Last commit](https://img.shields.io/github/last-commit/nickstuer/FriendAlerts)](https://github.com/nickstuer/FriendAlerts) [![CurseForge](https://img.shields.io/curseforge/dt/1248750?label=CurseForge&color=F16436)](https://www.curseforge.com/wow/addons/friendalerts)
 
-A World of Warcraft addon for Battle.net style alerts when friends change games or zones.
+A World of Warcraft addon for Battle.net style alerts when friends/guildies change gamess, changes zones, or levels their World of Warcraft character.
 
 ## Table of Contents
 
@@ -13,7 +13,7 @@ A World of Warcraft addon for Battle.net style alerts when friends change games 
 - [Development](https://github.com/nickstuer/blizzapi?tab=readme-ov-file#-development)
 - [Contributing](https://github.com/nickstuer/blizzapi?tab=readme-ov-file#-contributing)
 
-## Example
+## 📌 Example
 ![Example Alert](images/example.png)
 
 ## 📖 Features
@@ -45,10 +45,17 @@ Quickly configure the alerts to avoid chat spam. Select between Battle.net Favor
 
 ## 🛠 Install
 ```
-Download from CurseForge or WoWUp.
+1. Download from [CurseForge](https://www.curseforge.com/wow/addons/friendalerts) or use the CurseForge/WoWUp-CF app
+2. Extract to your 'World of Warcraft/Interface/AddOns' folder
+3. Ensure the addon is enabled on the character selection screen
 ```
 
-## 🎮 Usage
+## 🎮Usage
+- The addon works automatically once installed and will display alerts in the default chat frame
+- No additional commands or setup required for basic functionality
+- Configure the types of alerts you want to receive by typing '/fa'
+
+## 🔗 Configuration
 
 ### Slash Commands
 Use these commands to open up the FriendAlerts configuration.
@@ -74,8 +81,8 @@ Helpful links for developing or contributing to the addon.
 
 #### Deploy
 This copies the addon files to the appropriate World of Warcraft addons folder.
-MacOS: bash ./deploy.sh
-Windows: ./deploy.sh (via bash terminal)
+- MacOS: bash ./deploy.sh
+- Windows: ./deploy.sh (via bash terminal)
 
 
 ## 🏆 Contributing
