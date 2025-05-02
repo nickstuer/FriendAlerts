@@ -172,7 +172,7 @@ FR.Scan = function ()
 					end
 
 					-- Changes Game
-					if game ~= FR.bnetFriends[bnetIDAccount]["game"] and FR.bnetFriends[bnetIDAccount]["isOnline"] then
+					if game ~= FR.bnetFriends[bnetIDAccount]["game"] and FR.bnetFriends[bnetIDAccount]["isOnline"] and game ~= "WoW" then
 						if isFavorite and FriendAlertsDB.settings.notifications.bnetFavorite.ChangesGame.Enabled then
 							FR.Alert(FR.icons["Friend"] .. string.format("%s is now playing %s%s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game] or ""), (FR.games[game] or "Unknown")));
 
