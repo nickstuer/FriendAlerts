@@ -6,6 +6,25 @@ FR.UIHelper = UIHelper
 local NotificationsUI = {}
 FR.NotificationsUI = NotificationsUI
 
+local Utils = FR.Utils or {}
+FR.Utils = Utils
+
+local settingsName = {
+	["bnetFavoriteChangesGame"] = "Battle.net Favorite Changes Game",
+	["bnetFavoriteChangesCharacter"] = "Battle.net Favorite Changes Character",
+	["bnetFavoriteChangesCharacterZone"] = "Battle.net Favorite Changes Character Zone",
+	["bnetFavoriteLevelsCharacter"] = "Battle.net Favorite Levels Character",
+	["bnetFriendChangesGame"] = "Battle.net Friend Changes Game",
+	["bnetFriendChangesCharacter"] = "Battle.net Friend Changes Character",
+	["bnetFriendChangesCharacterZone"] = "Battle.net Friend Changes Character Zone",
+	["bnetFriendLevelsCharacter"] = "Battle.net Friend Levels Character",
+	["friendChangesCharacterZone"] = "Character Friend Enters New Zone",
+	["friendLevelsCharacter"] = "Character Friend Levels Character",
+	["guildMemberChangesCharacterZone"] = "Guild Member Enters New Zone",
+	["guildMemberLevelsCharacter"] = "Guild Member Levels Character",
+}
+
+
 function NotificationsUI:InitializeOptions()
 
     local panel = CreateFrame("Frame")
@@ -13,132 +32,245 @@ function NotificationsUI:InitializeOptions()
 
 	local yPos = -16
 
-  	-- Create header and description
+  	-- Tab header and description
 	local title = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	title:SetPoint("TOPLEFT", 16, yPos)
-	title:SetText("FriendAlerts")
-	title:SetTextColor(1, 0.84, 0)  -- Gold color for main title
+	title:SetText("Notifications Settings")
+	title:SetTextColor(1, 0.84, 0)
 	yPos = yPos - 25
 
 	local subtitle = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 	subtitle:SetPoint("TOPLEFT", 16, yPos)
-	subtitle:SetText("Displays Battle.net style alert when friends start playing a new game or enter new areas in World of Warcraft.")
+	subtitle:SetText("Allows you to configure notifications for friends/guildies entering new games or zones.")
 	yPos = yPos - 25
 
 	-- Add separator
 	local _, newY = UIHelper.CreateSeparator(panel, 16, yPos)
 	yPos = newY
 
+    -- Battle.net Favorite Notifications
+    local headerBNetFavorite1 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	headerBNetFavorite1:SetPoint("TOPLEFT", 16, yPos)
+	headerBNetFavorite1:SetText("Battle.net Favorite")
 
-  -- SECTION 1: General Options
-    local header, newY = UIHelper.CreateSectionHeader(panel, "Notification Options", 16, yPos)
-    yPos = newY - 5
+    local headerBNetFavorite2 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	headerBNetFavorite2:SetPoint("TOPLEFT", 300, yPos)
+	headerBNetFavorite2:SetText("Text")
 
-    -- Enable checkbox
-    local _, newY = UIHelper.CreateCheckbox(
-        panel,
-        "FREnableCheckbox",
-        "Battle.net Friend Launches New Game or Changes WoW Character",
-        30,
-        yPos,
-        FriendAlertsDB.settings.enteringNewGames,
-        function(self)
-            FriendAlertsDB.settings.enteringNewGames = self:GetChecked()
-        end
-    )
-    yPos = newY - 5
+    local headerBNetFavorite3 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	headerBNetFavorite3:SetPoint("TOPLEFT", 350, yPos)
+	headerBNetFavorite3:SetText("Sound")
 
-    -- Exclude guild members checkbox
-    local _, newY = UIHelper.CreateCheckbox(
-        panel,
-        "FRShowNewZonesCheckbox",
-        "Battle.net Friend Enters New WoW Zone",
-        30,
-        yPos,
-        FriendAlertsDB.settings.enteringNewAreas,
-        function(self)
-            FriendAlertsDB.settings.enteringNewAreas = self:GetChecked()
-        end
-    )
-    yPos = newY - 5
+    yPos = yPos - 25
 
-    -- Exclude guild members checkbox
-    local _, newY = UIHelper.CreateCheckbox(
-        panel,
-        "FRShowNewZonesCheckboxFavorites",
-        "Only Notifications for Battle.net Favorites",
-        30,
-        yPos,
-        FriendAlertsDB.settings.favoritesOnly,
-        function(self)
-            FriendAlertsDB.settings.favoritesOnly = self:GetChecked()
-        end
-    )
-    yPos = newY - 5
+    local bnetFavoriteChangesGameText = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    bnetFavoriteChangesGameText:SetPoint("TOPLEFT", 16, yPos)
+    bnetFavoriteChangesGameText:SetText(settingsName[k] or k)
 
-    -- Exclude guild members checkbox
-    local _, newY = UIHelper.CreateCheckbox(
-        panel,
-        "FRShowNewZonesCheckboxCharacterFriend",
-        "Character Friend Enters New Zone",
-        30,
-        yPos,
-        FriendAlertsDB.settings.enteringNewAreasLocalFriends,
-        function(self)
-            FriendAlertsDB.settings.enteringNewAreasLocalFriends = self:GetChecked()
-        end
-    )
-    yPos = newY - 5
+    for k, v in pairs(FriendAlertsDB.settings.notifications.bnetFavorite) do
+        local option = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        option:SetPoint("TOPLEFT", 16, yPos)
+        option:SetText(FriendAlertsDB.settings.notifications.bnetFavorite[k]["Text"])
 
-     -- Exclude guild members checkbox
-     local _, newY = UIHelper.CreateCheckbox(
-        panel,
-        "FRShowNewZonesCheckboxGuildMember",
-        "Guild Member Enters New Zone",
-        30,
-        yPos,
-        FriendAlertsDB.settings.enteringNewAreasGuildMembers,
-        function(self)
-            FriendAlertsDB.settings.enteringNewAreasGuildMembers = self:GetChecked()
-        end
-    )
-    yPos = newY - 10
+        -- Text Notification Checkbox
+        local _, _ = UIHelper.CreateCheckbox(
+            panel,
+            "CheckboxBNetFavoriteText" .. k,
+            "",
+            300,
+            yPos + 7,
+            FriendAlertsDB.settings.notifications.bnetFavorite[k]["Enabled"],
+            function(self)
+                FriendAlertsDB.settings.notifications.bnetFavorite[k]["Enabled"] = self:GetChecked()
+            end
+        )
+
+        -- Sound Checkbox
+        local _, newY = UIHelper.CreateCheckbox(
+            panel,
+            "CheckboxBNetFavoriteSound" .. k,
+            "",
+            350,
+            yPos + 7,
+            FriendAlertsDB.settings.notifications.bnetFavorite[k]["Sound"],
+            function(self)
+                FriendAlertsDB.settings.notifications.bnetFavorite[k]["Sound"] = self:GetChecked()
+            end
+        )
+        yPos = newY - 5
+    end
+    yPos = yPos - 10
 
     -- Add separator
-    local _, newY = UIHelper.CreateSeparator(panel, 16, yPos)
-    yPos = newY
-    
-      -- SECTION 1: General Options
-      local header, newY = UIHelper.CreateSectionHeader(panel, "Notification Sounds", 16, yPos)
-      yPos = newY - 5
-  
-      -- Enable checkbox
-      local _, newY = UIHelper.CreateCheckbox(
-          panel,
-          "FREnableCheckboxSounds",
-          "Battle.net Friend Launches New Game",
-          30,
-          yPos,
-          FriendAlertsDB.settings.enteringNewGamesSound,
-          function(self)
-              FriendAlertsDB.settings.enteringNewGamesSound = self:GetChecked()
-          end
-      )
-      yPos = newY - 5
-  
-      -- Exclude guild members checkbox
-      local _, newY = UIHelper.CreateCheckbox(
-          panel,
-          "FRShowNewZonesCheckboxSounds",
-          "Friend Enters New WoW Zone",
-          30,
-          yPos,
-          FriendAlertsDB.settings.enteringNewAreasSound,
-          function(self)
-              FriendAlertsDB.settings.enteringNewAreasSound = self:GetChecked()
-          end
-      )
-      yPos = newY - 10
+	local _, newY = UIHelper.CreateSeparator(panel, 16, yPos)
+	yPos = newY
+
+    -- Battle.net Friend Notifications
+    local headerBNetFriend1 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	headerBNetFriend1:SetPoint("TOPLEFT", 16, yPos)
+	headerBNetFriend1:SetText("Battle.net Friend")
+
+    local headerBNetFriend2 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	headerBNetFriend2:SetPoint("TOPLEFT", 300, yPos)
+	headerBNetFriend2:SetText("Text")
+
+    local headerBNetFriend3 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	headerBNetFriend3:SetPoint("TOPLEFT", 350, yPos)
+	headerBNetFriend3:SetText("Sound")
+
+    yPos = yPos - 25
+
+    local bnetFriendChangesGameText = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    bnetFriendChangesGameText:SetPoint("TOPLEFT", 16, yPos)
+    bnetFriendChangesGameText:SetText(settingsName[k] or k)
+
+    for k, v in pairs(FriendAlertsDB.settings.notifications.bnetFriend) do
+        local option = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        option:SetPoint("TOPLEFT", 16, yPos)
+        option:SetText(FriendAlertsDB.settings.notifications.bnetFriend[k]["Text"])
+
+        -- Text Notification Checkbox
+        local _, _ = UIHelper.CreateCheckbox(
+            panel,
+            "CheckboxBNetFriendText" .. k,
+            "",
+            300,
+            yPos + 7,
+            FriendAlertsDB.settings.notifications.bnetFriend[k]["Enabled"],
+            function(self)
+                FriendAlertsDB.settings.notifications.bnetFriend[k]["Enabled"] = self:GetChecked()
+            end
+        )
+
+        -- Sound Checkbox
+        local _, newY = UIHelper.CreateCheckbox(
+            panel,
+            "CheckboxBNetFriendSound" .. k,
+            "",
+            350,
+            yPos + 7,
+            FriendAlertsDB.settings.notifications.bnetFriend[k]["Sound"],
+            function(self)
+                FriendAlertsDB.settings.notifications.bnetFriend[k]["Sound"] = self:GetChecked()
+            end
+        )
+        yPos = newY - 5
+    end
+    yPos = yPos - 10
+
+    -- Add separator
+	local _, newY = UIHelper.CreateSeparator(panel, 16, yPos)
+	yPos = newY
+
+    -- Character Friend Notifications
+    local headerFriend1 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	headerFriend1:SetPoint("TOPLEFT", 16, yPos)
+	headerFriend1:SetText("Character Friend")
+
+    local headerFriend2 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	headerFriend2:SetPoint("TOPLEFT", 300, yPos)
+	headerFriend2:SetText("Text")
+
+    local headerFriend3 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	headerFriend3:SetPoint("TOPLEFT", 350, yPos)
+	headerFriend3:SetText("Sound")
+
+    yPos = yPos - 25
+
+    local friendChangesGameText = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    friendChangesGameText:SetPoint("TOPLEFT", 16, yPos)
+    friendChangesGameText:SetText(settingsName[k] or k)
+
+    for k, v in pairs(FriendAlertsDB.settings.notifications.friend) do
+        local option = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        option:SetPoint("TOPLEFT", 16, yPos)
+        option:SetText(FriendAlertsDB.settings.notifications.friend[k]["Text"])
+
+        -- Text Notification Checkbox
+        local _, _ = UIHelper.CreateCheckbox(
+            panel,
+            "CheckboxFriendText" .. k,
+            "",
+            300,
+            yPos + 7,
+            FriendAlertsDB.settings.notifications.friend[k]["Enabled"],
+            function(self)
+                FriendAlertsDB.settings.notifications.friend[k]["Enabled"] = self:GetChecked()
+            end
+        )
+
+        -- Sound Checkbox
+        local _, newY = UIHelper.CreateCheckbox(
+            panel,
+            "CheckboxFriendSound" .. k,
+            "",
+            350,
+            yPos + 7,
+            FriendAlertsDB.settings.notifications.friend[k]["Sound"],
+            function(self)
+                FriendAlertsDB.settings.notifications.friend[k]["Sound"] = self:GetChecked()
+            end
+        )
+        yPos = newY - 5
+    end
+    yPos = yPos - 10
+
+    -- Add separator
+	local _, newY = UIHelper.CreateSeparator(panel, 16, yPos)
+	yPos = newY
+
+    -- Guild Member Notifications
+    local headerGuildMember1 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	headerGuildMember1:SetPoint("TOPLEFT", 16, yPos)
+	headerGuildMember1:SetText("Guild Member")
+
+    local headerGuildMember2 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	headerGuildMember2:SetPoint("TOPLEFT", 300, yPos)
+	headerGuildMember2:SetText("Text")
+
+    local headerGuildMember3 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	headerGuildMember3:SetPoint("TOPLEFT", 350, yPos)
+	headerGuildMember3:SetText("Sound")
+
+    yPos = yPos - 25
+
+    local guildMemberChangesGameText = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    guildMemberChangesGameText:SetPoint("TOPLEFT", 16, yPos)
+    guildMemberChangesGameText:SetText(settingsName[k] or k)
+
+    for k, v in pairs(FriendAlertsDB.settings.notifications.guildMember) do
+        local option = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        option:SetPoint("TOPLEFT", 16, yPos)
+        option:SetText(FriendAlertsDB.settings.notifications.guildMember[k]["Text"])
+
+        -- Text Notification Checkbox
+        local _, _ = UIHelper.CreateCheckbox(
+            panel,
+            "CheckboxGuildMemberText" .. k,
+            "",
+            300,
+            yPos + 7,
+            FriendAlertsDB.settings.notifications.guildMember[k]["Enabled"],
+            function(self)
+                FriendAlertsDB.settings.notifications.guildMember[k]["Enabled"] = self:GetChecked()
+            end
+        )
+
+        -- Sound Checkbox
+        local _, newY = UIHelper.CreateCheckbox(
+            panel,
+            "CheckboxGuildMemberSound" .. k,
+            "",
+            350,
+            yPos + 7,
+            FriendAlertsDB.settings.notifications.guildMember[k]["Sound"],
+            function(self)
+                FriendAlertsDB.settings.notifications.guildMember[k]["Sound"] = self:GetChecked()
+            end
+        )
+        yPos = newY - 5
+    end
+    yPos = yPos - 10
 
     -- Register with the Interface Options
     local supportCategory = Settings.RegisterCanvasLayoutSubcategory(FR.mainCategory, panel, panel.name)

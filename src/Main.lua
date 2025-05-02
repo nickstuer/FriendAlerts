@@ -3,27 +3,96 @@ local addonName, FR = ...;
 local Utils = FR.Utils or {}
 FR.Utils = Utils
 
-FR.version = "1.3.0";
+FR.version = C_AddOns.GetAddOnMetadata("FriendAlerts", "Version") or "Unknown"
 FR.addonName = addonName;
-FR.friends = {};
-FR.localFriends = {};
+FR.bnetFriends = {};
+FR.characterFriends = {};
 FR.guildMembers = {};
 
 -- Default settings
 local defaults = {
-	enteringNewGames = true,
-	enteringNewAreas = false,
-	enteringNewAreasLocalFriends = false,
-	enteringNewAreasGuildMembers = false,
-	favoritesOnly = false,
-	enteringNewGamesSound = true,
-	enteringNewAreasSound = false,
-	scanInterval = 3, -- in seconds
+	notifications = {
+		bnetFavorite = {
+			ChangesGame = {
+				Enabled = true,
+				Sound = true,
+				Text = "Changes Game",
+			},
+			ChangesCharacter = {
+				Enabled = true,
+				Sound = true,
+				Text = "Changes WoW Character",
+			},
+			ChangesZone = {
+				Enabled = true,
+				Sound = false,
+				Text = "Changes WoW Zone",
+			},
+			LevelsCharacter = {
+				Enabled = true,
+				Sound = false,
+				Text = "Levels WoW Character",
+			},
+		},
+		bnetFriend = {
+			ChangesGame = {
+				Enabled = true,
+				Sound = true,
+				Text = "Changes Game",
+			},
+			ChangesCharacter = {
+				Enabled = true,
+				Sound = true,
+				Text = "Changes WoW Character",
+			},
+			ChangesZone = {
+				Enabled = true,
+				Sound = false,
+				Text = "Changes WoW Zone",
+			},
+			LevelsCharacter = {
+				Enabled = true,
+				Sound = false,
+				Text = "Levels WoW Character",
+			},
+		},
+		friend = {
+			ChangesZone = {
+				Enabled = true,
+				Sound = false,
+				Text = "Changes WoW Zone",
+			},
+			LevelsCharacter = {
+				Enabled = true,
+				Sound = false,
+				Text = "Levels WoW Character",
+			},
+		},
+		guildMember = {
+			ChangesZone = {
+				Enabled = false,
+				Sound = false,
+				Text = "Changes WoW Zone",
+			},
+			LevelsCharacter = {
+				Enabled = true,
+				Sound = false,
+				Text = "Levels WoW Character",
+			},
+		},
+	},
+
+	options = {
+		scanInterval = 3, -- in seconds
+	},
+
+	config = {
+		databaseVersion = 1,
+	}
 }
 
 FR.icons = {
 	["App"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-Battlenet:14:14:0:0:30:30|t",
-	--["BSAp"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-Battlenet:14:14:0:0:30:30|t", 
 	["BSAp"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-armorychat-awaymobile:14:14:0:0:30:30|t",
 	["WoW"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-WoW:14:14:0:0:30:30|t",
 	["Horde"] = "|TInterface\\Common\\icon-horde:20|t",
@@ -62,36 +131,158 @@ FR.Alert = function(text)
 	ChatFrame:AddMessage(text, BATTLENET_FONT_COLOR["r"], BATTLENET_FONT_COLOR["g"], BATTLENET_FONT_COLOR["b"]);
 end
 
-FR.ScanFriends2 = function ()
+FR.Scan = function ()
+
+	--
+	-- battle.net Friends
+	--
+	if BNConnected() then
+		--print ("Scanning battle.net Friends...");
+		--print(FriendAlertsDB.settings.notifications.bnetFriendChangesGame)
+		for index = 1, BNGetNumFriends() do
+			exit = true;
+			local friendAccountInfo = C_BattleNet.GetFriendAccountInfo(index);
+
+			if friendAccountInfo then
+				local bnetIDAccount = friendAccountInfo.bnetAccountID;
+				local accountName = friendAccountInfo.accountName;
+				local isOnline = friendAccountInfo.gameAccountInfo.isOnline or false;
+				local isFavorite = friendAccountInfo.isFavorite or false;
+
+				local game = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.clientProgram) or nil;
+				local areaName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.areaName) or "Unknown";
+				local characterName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.characterName) or "Unknown";
+				local characterLevel = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.characterLevel) or nil;
+				local realmName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.realmName) or nil;
+				local factionName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.factionName) or "Unknown";
+				local gameAccountID = friendAccountInfo.gameAccountInfo.wowProjectID or nil; -- WoW Project ID aka version
+				local slug = characterName;
+				if realmName then
+					slug = slug .. "-" .. realmName;
+				end
+				
+				repeat
+					if not FR.bnetFriends[bnetIDAccount] then break end
+
+					if not game then break end
+					if (isOnline == false) then break end
+
+					if not FR.icons[game] then
+						Utils.Debug("Unknown Game: " .. game);
+					end
+
+					-- Changes Game
+					if game ~= FR.bnetFriends[bnetIDAccount]["game"] and FR.bnetFriends[bnetIDAccount]["isOnline"] then
+						if isFavorite and FriendAlertsDB.settings.notifications.bnetFavorite.ChangesGame.Enabled then
+							FR.Alert(FR.icons["Friend"] .. string.format("%s is now playing %s%s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game] or ""), (FR.games[game] or "Unknown")));
+
+							if FriendAlertsDB.settings.notifications.bnetFavorite.ChangesGame.Sound then PlaySound(18019) end
+						end
+
+						if not isFavorite and FriendAlertsDB.settings.notifications.bnetFriend.ChangesGame.Enabled then
+							FR.Alert(FR.icons["Friend"] .. string.format("%s is now playing %s%s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game] or ""), (FR.games[game] or "Unknown")));
+							if FriendAlertsDB.settings.notifications.bnetFriend.ChangesGame.Sound then PlaySound(18019) end
+						end
+						break
+					end
+
+					-- Changes Character in WoW
+					if game ~= "WoW" then break end
+
+					if slug ~= FR.bnetFriends[bnetIDAccount]["characterSlug"] then
+						if isFavorite and FriendAlertsDB.settings.notifications.bnetFavorite.ChangesCharacter.Enabled then
+							FR.Alert(FR.icons["Friend"] .. string.format("%s is now playing %s (%s%s).", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game]), (FR.icons[factionName]), (slug)));
+							if FriendAlertsDB.settings.notifications.bnetFavorite.ChangesCharacter.Sound then PlaySound(18019) end
+						end
+
+						if not isFavorite and FriendAlertsDB.settings.notifications.bnetFriend.ChangesCharacter.Enabled then
+							FR.Alert(FR.icons["Friend"] .. string.format("%s is now playing %s (%s%s).", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game]), (FR.icons[factionName]), (slug)));
+							if FriendAlertsDB.settings.notifications.bnetFriend.ChangesCharacter.Sound then PlaySound(18019) end
+						end
+						break
+					end
+
+					-- Changes Zone in WoW
+					if areaName ~= FR.bnetFriends[bnetIDAccount]["areaName"] then
+						if isFavorite and FriendAlertsDB.settings.notifications.bnetFavorite.ChangesCharacter.Enabled then
+							FR.Alert(FR.icons["Friend"] .. string.format("%s %s%s has entered %s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (slug), (areaName)));
+							if FriendAlertsDB.settings.notifications.bnetFavorite.ChangesCharacter.Sound then PlaySound(18019) end
+						end
+
+						if not isFavorite and FriendAlertsDB.settings.notifications.bnetFriend.ChangesCharacter.Enabled then
+							FR.Alert(FR.icons["Friend"] .. string.format("%s %s%s has entered %s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (slug), (areaName)));
+							if FriendAlertsDB.settings.notifications.bnetFriend.ChangesCharacter.Sound then PlaySound(18019) end
+						end
+						break
+					end
+
+					-- Levels Character in WoW
+					if characterLevel ~= FR.bnetFriends[bnetIDAccount]["characterLevel"] then
+						if isFavorite and FriendAlertsDB.settings.notifications.bnetFavorite.LevelsCharacter.Enabled then
+							FR.Alert(FR.icons["Friend"] .. string.format("%s %s%s has reached level %d!", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (slug), (characterLevel)));
+							if FriendAlertsDB.settings.notifications.bnetFavorite.LevelsCharacter.Sound then PlaySound(18019) end
+						end
+
+						if not isFavorite and FriendAlertsDB.settings.notifications.bnetFriend.LevelsCharacter.Enabled then
+							FR.Alert(FR.icons["Friend"] .. string.format("%s %s%s has reached level %d!", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (slug), (characterLevel)));
+							if FriendAlertsDB.settings.notifications.bnetFriend.LevelsCharacter.Sound then PlaySound(18019) end
+						end
+						break
+					end
+
+				until true
+
+				FR.bnetFriends[bnetIDAccount] = FR.bnetFriends[bnetIDAccount] or {};
+				FR.bnetFriends[bnetIDAccount]["game"] = game;
+				FR.bnetFriends[bnetIDAccount]["isOnline"] = isOnline;
+				FR.bnetFriends[bnetIDAccount]["areaName"] = areaName;
+				FR.bnetFriends[bnetIDAccount]["characterSlug"] = slug;
+				FR.bnetFriends[bnetIDAccount]["characterLevel"] = characterLevel;
+			
+			end
+		end
+	end
+
+	--
+	-- Character Friends --
+	--
 	numberOfFriends = C_FriendList.GetNumFriends();
 	--FR.Debug("Number of Friends: " .. numberOfFriends);
 
-	if FriendAlertsDB.settings.enteringNewAreasLocalFriends then
+	if FriendAlertsDB.settings.notifications.friend.ChangesZone.Enabled or FriendAlertsDB.settings.notifications.friend.LevelsCharacter.Enabled then
 		for index = 1, numberOfFriends do
 
 			local friendInfo = C_FriendList.GetFriendInfoByIndex(index);
 			local isOnline = friendInfo.connected or nil;
 			local characterName = friendInfo.name or nil;
 			local areaName = friendInfo.area or nil;
+			local characterLevel = friendInfo.level or nil;
 
 			if isOnline and characterName then
-				--DevTools_Dump(friendInfo);
-
-				if FR.localFriends[characterName] then
-					if FR.localFriends[characterName]["area"] ~= areaName and FriendAlertsDB.settings.enteringNewAreasLocalFriends then
+				if FR.characterFriends[characterName] then
+					-- Changes Zone in WoW
+					if FR.characterFriends[characterName]["area"] ~= areaName and FriendAlertsDB.settings.notifications.friend.ChangesZone.Enabled then
 						FR.Alert(string.format("|cffffff00%s has entered %s.", characterName, areaName));
-						if FriendAlertsDB.settings.enteringNewAreasSound then
-							PlaySound(18019);
-						end
+						if FriendAlertsDB.settings.notifications.friend.ChangesZone.Sound then PlaySound(18019) end
+					end
+
+					-- Levels Character in WoW
+					if characterLevel ~= FR.characterFriends[characterName]["level"] and FriendAlertsDB.settings.notifications.friend.LevelsCharacter.Enabled then
+						FR.Alert(string.format("|cffffff00%s has reached %d!", characterName, characterLevel));
+						if FriendAlertsDB.settings.notifications.friend.LevelsCharacter.Sound then PlaySound(18019) end
 					end
 				end
-				FR.localFriends[characterName] = friendInfo or {};
-				FR.localFriends[characterName]["area"] = areaName;
+				FR.characterFriends[characterName] = friendInfo or {};
+				FR.characterFriends[characterName]["area"] = areaName;
+				FR.characterFriends[characterName]["level"] = characterLevel;
 			end
 		end
 	end
 
-	if FriendAlertsDB.settings.enteringNewAreasGuildMembers then
+	--
+	-- Guild Members --
+	--
+	if FriendAlertsDB.settings.notifications.guildMember.ChangesZone.Enabled or FriendAlertsDB.settings.notifications.guildMember.LevelsCharacter.Enabled then
 		C_GuildInfo.GuildRoster();
 		numTotal, numOnline = GetNumGuildMembers();
 
@@ -99,136 +290,30 @@ FR.ScanFriends2 = function ()
 			local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile, isSoREligible, standingID = GetGuildRosterInfo(index);
 
 			if name and online and FR.guildMembers[name] then
-				if zone ~= FR.guildMembers[name]["zone"] then
-					if FriendAlertsDB.settings.enteringNewAreasGuildMembers then
-						FR.Alert(string.format("|cffffff00%s has entered %s.", name, zone));
-						if FriendAlertsDB.settings.enteringNewAreasSound then
-							PlaySound(18019);
-						end
-					end
+				-- Changes Zone in WoW
+				if zone ~= FR.guildMembers[name]["zone"] and FriendAlertsDB.settings.notifications.guildMember.ChangesZone.Enabled then
+					FR.Alert(string.format("\124c0000FF98%s has entered %s.\124r", name, zone)); 
+					if FriendAlertsDB.settings.notifications.guildMember.ChangesZone.Sound then PlaySound(18019) end
+				end
+
+				-- Levels Character in WoW
+				if level ~= FR.guildMembers[name]["level"] and FriendAlertsDB.settings.notifications.guildMember.LevelsCharacter.Enabled then
+					FR.Alert(string.format("\124c0000FF98%s has reached %d!\124r", name, level)); 
+					if FriendAlertsDB.settings.notifications.guildMember.LevelsCharacter.Sound then PlaySound(18019) end
 				end
 			end
 
 			if name then
 				FR.guildMembers[name] = FR.guildMembers[name] or {};
 				FR.guildMembers[name]["zone"] = zone;
+				FR.guildMembers[name]["level"] = level;
 			end
 		end
 	end
 
-	C_Timer.After(FriendAlertsDB.settings.scanInterval, FR.ScanFriends2);
+	C_Timer.After(FriendAlertsDB.settings.options.scanInterval, FR.Scan);
 end
 
--- Classic Example:
---.gameAccountInfo:
--- clientProgram = "WoW"
--- className = "Rogue"
--- richPresence="WoW Classic Anniversary - Nightslayer"
--- characterLevel = 6
--- realmID=6104 (Nightslayer)
-
-FR.ScanFriends = function ()
-	if BNConnected() then
-		--print ("Scanning Friends...");
-		for index = 1, BNGetNumFriends() do
-			local friendAccountInfo = C_BattleNet.GetFriendAccountInfo(index);
-
-			if friendAccountInfo then
-				local bnetIDAccount = friendAccountInfo.bnetAccountID;
-				local accountName = friendAccountInfo.accountName;
-				local isOnline = friendAccountInfo.gameAccountInfo.isOnline or false;
-				local lastOnlineTime = friendAccountInfo.lastOnlineTime;
-				local game = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.clientProgram) or nil;
-				local areaName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.areaName) or "Unknown";
-				local characterName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.characterName) or "Unknown";
-				local realmName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.realmName) or nil;
-				local factionName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.factionName) or "Unknown";
-				local isFavorite = friendAccountInfo.isFavorite or false;
-
-				local gameAccountID = friendAccountInfo.gameAccountInfo.wowProjectID or nil;
-				
-				if game and FR.friends[bnetIDAccount] and FR.friends[bnetIDAccount]["game"] then
-
-					if game ~= FR.friends[bnetIDAccount]["game"] and FriendAlertsDB.settings.enteringNewGames then
-						if game == "WoW" then
-							
-							local slug = characterName;
-
-							if realmName then
-								slug = slug .. "-" .. realmName;
-							end
-							
-							if (FriendAlertsDB.settings.favoritesOnly and isFavorite) or (not FriendAlertsDB.settings.favoritesOnly) then
-								FR.Alert(FR.icons["Friend"] .. string.format("%s is now playing %s (%s%s).", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game]), (FR.icons[factionName]), (slug)));
-							end
-							if FriendAlertsDB.settings.enteringNewGamesSound then
-								if (FriendAlertsDB.settings.favoritesOnly and isFavorite) or (not FriendAlertsDB.settings.favoritesOnly) then
-									--PlaySound(18019);
-									PlaySound(110981);
-								end
-							end
-
-							FR.friends[bnetIDAccount] = FR.friends[bnetIDAccount] or {};
-							FR.friends[bnetIDAccount]["game"] = game;
-							FR.friends[bnetIDAccount]["areaName"] = areaName;
-
-						else
-							if isOnline then  -- Don't Alert if the change is that friend went offline
-								if (FriendAlertsDB.settings.favoritesOnly and isFavorite) or (not FriendAlertsDB.settings.favoritesOnly) then
-									FR.Alert( FR.icons["Friend"] .. string.format("%s is now playing %s%s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game] or ""), (FR.games[game] or "Unknown")));
-								end
-								if not FR.icons[game] then
-									Utilities.Debug("Game: " .. game);
-								end
-								if (FriendAlertsDB.settings.favoritesOnly and isFavorite) or (not FriendAlertsDB.settings.favoritesOnly) then
-									if FriendAlertsDB.settings.enteringNewGamesSound then
-										PlaySound(18019);
-									end
-								end					
-							end
-						end
-					end
-
-					if game == "WoW" and FriendAlertsDB.settings.enteringNewAreas then
-						if areaName ~= FR.friends[bnetIDAccount]["areaName"] then
-							FR.friends[bnetIDAccount]["areaName"] = areaName;
-							local slug = characterName;
-
-							if realmName then
-								slug = slug .. "-" .. realmName;
-							end
-							
-							if (FriendAlertsDB.settings.favoritesOnly and isFavorite) or (not FriendAlertsDB.settings.favoritesOnly) then
-								FR.Alert(FR.icons["Friend"] .. string.format("%s %s%s has entered %s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (slug), (areaName)));
-								
-								local game = FR.WoWVersions[gameAccountID] or "Unknown";
-
-								Utils.Debug("Game: " .. game .. " | GameAccountID: " .. gameAccountID);
-							
-							end
-							if (FriendAlertsDB.settings.favoritesOnly and isFavorite) or (not FriendAlertsDB.settings.favoritesOnly) then
-								if FriendAlertsDB.settings.enteringNewAreasSound then
-									PlaySound(18019);
-								end
-							end
-						end
-					end
-				end
-
-				FR.friends[bnetIDAccount] = FR.friends[bnetIDAccount] or {};
-				FR.friends[bnetIDAccount]["game"] = game;
-				FR.friends[bnetIDAccount]["areaName"] = areaName;
-				
-			end
-		end
-	end
-
-	if  FriendAlertsDB.settings.scanInterval < 1 then
-		FriendAlertsDB.settings.scanInterval = 1;
-	end
-
-	C_Timer.After(FriendAlertsDB.settings.scanInterval, FR.ScanFriends);
-end
 
 local initFrame = CreateFrame("Frame")
 initFrame:RegisterEvent("ADDON_LOADED")
@@ -238,12 +323,22 @@ initFrame:SetScript("OnEvent", function(self, event, arg1)
     if event == "ADDON_LOADED" and arg1 == addonName then
 
 		-- Initialize the database if it doesn't exist
+		--FriendAlertsDB = nil
 		if not FriendAlertsDB then
 			FriendAlertsDB = {
 				settings = CopyTable(defaults),
 			}
 		end
 
+		-- Upgrade database if needed (currently just erase database if using an old version of the database, but allow for future upgrades by checking version number)
+		if not FriendAlertsDB.settings.config.databaseVersion then
+			FriendAlertsDB = {
+				settings = CopyTable(defaults),
+			}
+		end
+
+		-- useful during development when adding new settings to database, be cautious though when adding new settings to an existing dictionary.
+		-- perhaps expand this to check for specific keys that are missing
 		for k, v in pairs(defaults) do
 			if FriendAlertsDB.settings[k] == nil then
 				FriendAlertsDB.settings[k] = v
@@ -279,8 +374,7 @@ initFrame:SetScript("OnEvent", function(self, event, arg1)
 	end
 
 	if event == "PLAYER_LOGIN" then
-		C_Timer.After(4, FR.ScanFriends2);
-		C_Timer.After(5, FR.ScanFriends);  -- Don't perform first scan until after 5 seconds
+		C_Timer.After(4, FR.Scan);
 		self:UnregisterEvent("PLAYER_LOGIN")
 	end
 end)

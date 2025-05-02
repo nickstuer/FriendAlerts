@@ -13,14 +13,25 @@ A World of Warcraft addon for Battle.net style alerts when friends change games 
 - [Development](https://github.com/nickstuer/blizzapi?tab=readme-ov-file#-development)
 - [Contributing](https://github.com/nickstuer/blizzapi?tab=readme-ov-file#-contributing)
 
+## Example
+![Example Alert](images/example.png)
 
 ## 📖 Features
 
 ### Launching New Games
-Displays a Battle.net style message in the chat window to indicate that a friend has launched a new game. It also notifies you when a friend changes their WoW character.
+Displays a Battle.net style message in the chat window to indicate that a friend has launched a new game.
+
+### Changes WoW Characters
+Displays a Battle.net style message in the chat window to indicate that a friend has logged into a different WoW character.
+
+### Ding WoW Level
+Displays a Battle.net style message in the chat window to indicate that a friend or guild member has dinged a new level.
 
 ### Entering New Zones
-Displays a message in the chat when a Battle.net friend enters a new zone in World of Warcraft.
+Displays a message in the chat when a Battle.net friend or guild member enters a new zone in World of Warcraft.
+
+### Easy Configuration
+Quickly configure the alerts to avoid chat spam. Select between Battle.net Favorite, Battle.net Friend, Character Friends, Guild Members.
 
 ### Supported Game Notifications
 | Game                                  | Status                              |
@@ -29,7 +40,8 @@ Displays a message in the chat when a Battle.net friend enters a new zone in Wor
 | World Of Warcraft (Classic)           | Supported                           |
 | World of Warcraft (Classic Era)       | Supported                           |
 | Hearthstone                           | Supported                           |
-
+| Heroes of the Storm                   | Supported                           |
+| Overwatch                             | Supported                           |
 
 ## 🛠 Install
 ```
@@ -39,7 +51,7 @@ Download from CurseForge or WoWUp.
 ## 🎮 Usage
 
 ### Slash Commands
-Use these commands to configure the addon
+Use these commands to open up the FriendAlerts configuration.
 ```
 /fa
 /friendalerts
@@ -67,7 +79,6 @@ Windows: ./deploy.sh (via bash terminal)
 
 
 ## 🏆 Contributing
-
 PRs accepted.
 
 If editing the Readme, please conform to the [standard-readme](https://github.com/RichardLitt/standard-readme) specification.

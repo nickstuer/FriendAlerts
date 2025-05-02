@@ -39,10 +39,10 @@ function OptionsUI:InitializeOptions()
         "FRScanIntervalSlider",
         "Scan Interval (seconds)",
         1, 10, 1,
-        FriendAlertsDB.settings.scanInterval,
+        FriendAlertsDB.settings.options.scanInterval,
         30, yPos, 400,
         function(value)
-            FriendAlertsDB.settings.scanInterval = value
+            FriendAlertsDB.settings.options.scanInterval = value
         end
     )
     yPos = newY
