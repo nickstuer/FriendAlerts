@@ -3,7 +3,7 @@ local addonName, FR = ...;
 local Utils = FR.Utils or {}
 FR.Utils = Utils
 
-FR.version = "1.2.0";
+FR.version = "1.3.0";
 FR.addonName = addonName;
 FR.friends = {};
 FR.localFriends = {};
