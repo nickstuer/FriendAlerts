@@ -169,10 +169,6 @@ FR.Scan = function ()
 					if not game then break end
 					if (isOnline == false) then break end
 
-					if not FR.icons[game] then
-						Utils.Debug("Unknown Game: " .. game);
-					end
-
 					-- Changes Game
 					if game ~= FR.bnetFriends[bnetIDAccount]["game"] and FR.bnetFriends[bnetIDAccount]["isOnline"] and game ~= "WoW" then
 						if isFavorite and FriendAlertsDB.settings.notifications.bnetFavorite.ChangesGame.Enabled then
@@ -184,6 +180,10 @@ FR.Scan = function ()
 						if not isFavorite and FriendAlertsDB.settings.notifications.bnetFriend.ChangesGame.Enabled then
 							FR.Alert(FR.icons["Friend"] .. string.format("%s is now playing %s%s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game] or ""), (FR.games[game] or "Unknown")));
 							if FriendAlertsDB.settings.notifications.bnetFriend.ChangesGame.Sound then PlaySound(18019) end
+						end
+
+						if not FR.icons[game] then
+							Utils.Debug("Unknown Game: " .. game);
 						end
 						break
 					end
