@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FILENAME=$"FriendAlerts-v2.0.0.zip"
+FILENAME=$"FriendAlerts-v2.0.1.zip"
 
 #####
 BUILD_DIRECTORY=$"${PWD}/dist"
