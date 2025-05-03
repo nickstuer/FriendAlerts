@@ -1,5 +1,5 @@
 local _, addon = ...
 
 addon.Config = {
-	DEBUG_ENABLED = true,
+	DEBUG_ENABLED = false,
 }
