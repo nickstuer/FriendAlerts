@@ -206,14 +206,14 @@ FR.Scan = function ()
 
 					-- Changes Zone in WoW
 					if areaName ~= FR.bnetFriends[bnetIDAccount]["areaName"] then
-						if isFavorite and FriendAlertsDB.settings.notifications.bnetFavorite.ChangesCharacter.Enabled then
+						if isFavorite and FriendAlertsDB.settings.notifications.bnetFavorite.ChangesZone.Enabled then
 							FR.Alert(FR.icons["Friend"] .. string.format("%s %s%s has entered %s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (slug), (areaName)));
-							if FriendAlertsDB.settings.notifications.bnetFavorite.ChangesCharacter.Sound then PlaySound(18019) end
+							if FriendAlertsDB.settings.notifications.bnetFavorite.ChangesZone.Sound then PlaySound(18019) end
 						end
 
-						if not isFavorite and FriendAlertsDB.settings.notifications.bnetFriend.ChangesCharacter.Enabled then
+						if not isFavorite and FriendAlertsDB.settings.notifications.bnetFriend.ChangesZone.Enabled then
 							FR.Alert(FR.icons["Friend"] .. string.format("%s %s%s has entered %s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (slug), (areaName)));
-							if FriendAlertsDB.settings.notifications.bnetFriend.ChangesCharacter.Sound then PlaySound(18019) end
+							if FriendAlertsDB.settings.notifications.bnetFriend.ChangesZone.Sound then PlaySound(18019) end
 						end
 						break
 					end
