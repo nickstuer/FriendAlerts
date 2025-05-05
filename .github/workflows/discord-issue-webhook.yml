@@ -8,7 +8,7 @@ jobs:
   notify-discord:
     runs-on: ubuntu-latest
     steps:
-      - name: Send nicely formatted message to Discord
+      - name: Send Discord embed message
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
@@ -19,30 +19,35 @@ jobs:
           ISSUE_AVATAR: ${{ github.event.issue.user.avatar_url }}
           ISSUE_DATE: ${{ github.event.issue.created_at }}
           REPO_NAME: ${{ github.repository }}
-          run: |
-        # Safely escape double quotes and backslashes in issue title and body
-        ESCAPED_TITLE=$(echo "$ISSUE_TITLE" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g')
-        ESCAPED_BODY=$(echo "$ISSUE_BODY" | head -c 200 | sed 's/\\/\\\\/g' | sed 's/"/\\"/g')
-        if [ -z "$ESCAPED_BODY" ]; then
-          ESCAPED_BODY="No description provided."
-        fi
+        run: |
+          # Truncate and escape issue title/body
+          ESCAPED_TITLE=$(echo "$ISSUE_TITLE" | sed 's/\\/\\\\/g; s/"/\\"/g')
+          ESCAPED_BODY=$(echo "$ISSUE_BODY" | head -c 200 | sed 's/\\/\\\\/g; s/"/\\"/g')
+          if [ -z "$ESCAPED_BODY" ]; then
+            ESCAPED_BODY="No description provided."
+          fi
 
-        curl -X POST -H "Content-Type: application/json" \
-        -d "{
-          \"embeds\": [{
-            \"title\": \"🆕 New Issue #$ISSUE_NUMBER: $ESCAPED_TITLE\",
-            \"description\": \"$ESCAPED_BODY...\",
-            \"url\": \"$ISSUE_URL\",
-            \"color\": 7506394,
-            \"author\": {
-              \"name\": \"$ISSUE_AUTHOR\",
-              \"url\": \"https://github.com/$ISSUE_AUTHOR\",
-              \"icon_url\": \"$ISSUE_AVATAR\"
-            },
-            \"footer\": {
-              \"text\": \"$REPO_NAME\"
-            },
-            \"timestamp\": \"$ISSUE_DATE\"
-          }]
-        }" \
-        "$DISCORD_WEBHOOK"
+          # Write JSON payload to file
+          cat <<EOF > payload.json
+{
+  "embeds": [{
+    "title": "🆕 New Issue #$ISSUE_NUMBER: $ESCAPED_TITLE",
+    "description": "$ESCAPED_BODY...",
+    "url": "$ISSUE_URL",
+    "color": 7506394,
+    "author": {
+      "name": "$ISSUE_AUTHOR",
+      "url": "https://github.com/$ISSUE_AUTHOR",
+      "icon_url": "$ISSUE_AVATAR"
+    },
+    "footer": {
+      "text": "$REPO_NAME"
+    },
+    "timestamp": "$ISSUE_DATE"
+  }]
+}
+EOF
+
+          # Send it to Discord
+          curl -X POST -H "Content-Type: application/json" \
+            -d @payload.json "$DISCORD_WEBHOOK"
