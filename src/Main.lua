@@ -333,7 +333,7 @@ initFrame:SetScript("OnEvent", function(self, event, arg1)
 		end
 
 		-- Upgrade database if needed (currently just erase database if using an old version of the database, but allow for future upgrades by checking version number)
-		if not FriendAlertsDB.settings.config.databaseVersion then
+		if not FriendAlertsDB.settings.config then
 			FriendAlertsDB = {
 				settings = CopyTable(defaults),
 			}
