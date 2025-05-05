@@ -8,7 +8,7 @@ jobs:
   notify-discord:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Discord embed message
+      - name: Send new issue to Discord
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
@@ -17,37 +17,40 @@ jobs:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
           ISSUE_AVATAR: ${{ github.event.issue.user.avatar_url }}
-          ISSUE_DATE: ${{ github.event.issue.created_at }}
+          ISSUE_CREATED: ${{ github.event.issue.created_at }}
           REPO_NAME: ${{ github.repository }}
         run: |
-          # Truncate and escape issue title/body
-          ESCAPED_TITLE=$(echo "$ISSUE_TITLE" | sed 's/\\/\\\\/g; s/"/\\"/g')
-          ESCAPED_BODY=$(echo "$ISSUE_BODY" | head -c 200 | sed 's/\\/\\\\/g; s/"/\\"/g')
-          if [ -z "$ESCAPED_BODY" ]; then
-            ESCAPED_BODY="No description provided."
-          fi
+          # Truncate and sanitize
+          TRUNC_BODY=$(echo "$ISSUE_BODY" | head -c 200)
+          [ -z "$TRUNC_BODY" ] && TRUNC_BODY="No description provided."
 
-          # Write JSON payload to file
-          cat <<EOF > payload.json
-{
-  "embeds": [{
-    "title": "🆕 New Issue #$ISSUE_NUMBER: $ESCAPED_TITLE",
-    "description": "$ESCAPED_BODY...",
-    "url": "$ISSUE_URL",
-    "color": 7506394,
-    "author": {
-      "name": "$ISSUE_AUTHOR",
-      "url": "https://github.com/$ISSUE_AUTHOR",
-      "icon_url": "$ISSUE_AVATAR"
-    },
-    "footer": {
-      "text": "$REPO_NAME"
-    },
-    "timestamp": "$ISSUE_DATE"
-  }]
-}
-EOF
+          # Create the payload using jq
+          PAYLOAD=$(jq -n \
+            --arg title "🆕 New Issue #$ISSUE_NUMBER: $ISSUE_TITLE" \
+            --arg description "$TRUNC_BODY..." \
+            --arg url "$ISSUE_URL" \
+            --arg author "$ISSUE_AUTHOR" \
+            --arg avatar "$ISSUE_AVATAR" \
+            --arg repo "$REPO_NAME" \
+            --arg created "$ISSUE_CREATED" \
+            '{
+              embeds: [{
+                title: $title,
+                description: $description,
+                url: $url,
+                color: 7506394,
+                author: {
+                  name: $author,
+                  url: "https://github.com/" + $author,
+                  icon_url: $avatar
+                },
+                footer: {
+                  text: $repo
+                },
+                timestamp: $created
+              }]
+            }')
 
-          # Send it to Discord
+          # Send to Discord
           curl -X POST -H "Content-Type: application/json" \
-            -d @payload.json "$DISCORD_WEBHOOK"
+               -d "$PAYLOAD" "$DISCORD_WEBHOOK"
