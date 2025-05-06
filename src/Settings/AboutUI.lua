@@ -44,6 +44,18 @@ function AboutUI:InitializeOptions()
     websiteURL:SetText("https://peavers.io")
     websiteURL:SetTextColor(0.3, 0.6, 1.0)
 
+    -- Thank Yous
+    local thanksLBL = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    thanksLBL:SetPoint("TOPLEFT", 16, -180)
+    thanksLBL:SetPoint("TOPRIGHT", -16, -180)
+    thanksLBL:SetJustifyH("LEFT")
+    thanksLBL:SetText("Thank You to the following individuals for their contributions in beta testing " .. ADDON_NAME .. "!")
+    thanksLBL:SetSpacing(2)
+
+    local thanksText = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+    thanksText:SetPoint("TOPLEFT", 16, -200)
+    thanksText:SetText("Lovestoned-Hellscream, Pixiè-Kel'Thuzad, Riptide-Spinebreaker")
+
     -- Additional info at bottom
     local additionalInfo = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
     additionalInfo:SetPoint("BOTTOMRIGHT", -16, 16)

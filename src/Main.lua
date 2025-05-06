@@ -376,7 +376,7 @@ initFrame:SetScript("OnEvent", function(self, event, arg1)
 	end
 
 	if event == "PLAYER_LOGIN" then
-		C_Timer.After(4, FR.Scan);
+		C_Timer.After(5, FR.Scan); -- Start scanning after a short delay
 		self:UnregisterEvent("PLAYER_LOGIN")
 	end
 end)
@@ -387,7 +387,7 @@ local loadingFrame = CreateFrame("Frame")
 loadingFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 loadingFrame:SetScript("OnEvent", function(self, event)
     if event == "PLAYER_ENTERING_WORLD" then
-        Utils.Print("Addon Loaded.")
+        Utils.Print("Addon Loaded. Version: " .. FR.version)
 		Utils.Debug("Testing");
         self:UnregisterEvent("PLAYER_ENTERING_WORLD")
     end
