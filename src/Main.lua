@@ -9,6 +9,8 @@ FR.bnetFriends = {};
 FR.characterFriends = {};
 FR.guildMembers = {};
 
+FR.bNetCharacterSlugs = {}; -- To temporarily store character slugs for battle.net friends to avoid duplicate notifications
+
 -- Default settings
 FR.defaults = {
 	notifications = {
@@ -224,6 +226,7 @@ FR.Scan = function ()
 					if game ~= "WoW" then break end
 
 					if slug ~= FR.bnetFriends[bnetIDAccount]["characterSlug"] then
+						FR.bNetCharacterSlugs[slug] = true
 						if isFavorite and FriendAlertsDB.settings.notifications.bnetFavorite.ChangesCharacter.Enabled then
 							FR.Alert(FR.icons["Friend"] .. string.format("%s is now playing %s (%s%s).", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game]), (FR.icons[factionName]), (slug)));
 							if FriendAlertsDB.settings.notifications.bnetFavorite.ChangesCharacter.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.bnetFavorite.ChangesCharacter.SoundFile], "Effects") end
@@ -238,6 +241,7 @@ FR.Scan = function ()
 
 					-- Changes Zone in WoW
 					if areaName ~= FR.bnetFriends[bnetIDAccount]["areaName"] then
+						FR.bNetCharacterSlugs[slug] = true
 						if isFavorite and FriendAlertsDB.settings.notifications.bnetFavorite.ChangesZone.Enabled then
 							FR.Alert(FR.icons["Friend"] .. string.format("%s %s%s has entered %s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (slug), (areaName)));
 							if FriendAlertsDB.settings.notifications.bnetFavorite.ChangesZone.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.bnetFavorite.ChangesZone.SoundFile], "Effects") end
@@ -252,6 +256,7 @@ FR.Scan = function ()
 
 					-- Levels Character in WoW
 					if characterLevel ~= FR.bnetFriends[bnetIDAccount]["characterLevel"] then
+						FR.bNetCharacterSlugs[slug] = true
 						if isFavorite and FriendAlertsDB.settings.notifications.bnetFavorite.LevelsCharacter.Enabled then
 							FR.Alert(FR.icons["Friend"] .. string.format("%s %s%s has reached level %d!", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (slug), (characterLevel)));
 							if FriendAlertsDB.settings.notifications.bnetFavorite.LevelsCharacter.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.bnetFavorite.LevelsCharacter.SoundFile], "Effects") end
@@ -291,17 +296,18 @@ FR.Scan = function ()
 			local characterName = friendInfo.name or nil;
 			local areaName = friendInfo.area or nil;
 			local characterLevel = friendInfo.level or nil;
+			local slug = characterName;
 
 			if isOnline and characterName then
 				if FR.characterFriends[characterName] then
 					-- Changes Zone in WoW
-					if FR.characterFriends[characterName]["area"] ~= areaName and FriendAlertsDB.settings.notifications.friend.ChangesZone.Enabled then
+					if FR.characterFriends[characterName]["area"] ~= areaName and FriendAlertsDB.settings.notifications.friend.ChangesZone.Enabled and not FR.bNetCharacterSlugs[slug] then
 						FR.Alert(string.format("|cffffff00%s has entered %s.", characterName, areaName));
 						if FriendAlertsDB.settings.notifications.friend.ChangesZone.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.friend.ChangesZone.SoundFile], "Effects") end
 					end
 
 					-- Levels Character in WoW
-					if characterLevel ~= FR.characterFriends[characterName]["level"] and FriendAlertsDB.settings.notifications.friend.LevelsCharacter.Enabled then
+					if characterLevel ~= FR.characterFriends[characterName]["level"] and FriendAlertsDB.settings.notifications.friend.LevelsCharacter.Enabled and not FR.bNetCharacterSlugs[slug] then
 						FR.Alert(string.format("|cffffff00%s has reached %d!", characterName, characterLevel));
 						if FriendAlertsDB.settings.notifications.friend.LevelsCharacter.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.friend.LevelsCharacter.SoundFile], "Effects") end
 					end
