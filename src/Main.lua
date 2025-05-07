@@ -10,28 +10,32 @@ FR.characterFriends = {};
 FR.guildMembers = {};
 
 -- Default settings
-local defaults = {
+FR.defaults = {
 	notifications = {
 		bnetFavorite = {
 			ChangesGame = {
 				Enabled = true,
 				Sound = true,
 				Text = "Changes Game",
+				SoundFile = "swift-gesture",
 			},
 			ChangesCharacter = {
 				Enabled = true,
 				Sound = true,
 				Text = "Changes WoW Character",
+				SoundFile = "swift-gesture",
 			},
 			ChangesZone = {
 				Enabled = true,
 				Sound = false,
 				Text = "Changes WoW Zone",
+				SoundFile = "swift-gesture",
 			},
 			LevelsCharacter = {
 				Enabled = true,
 				Sound = false,
 				Text = "Levels WoW Character",
+				SoundFile = "so-proud",
 			},
 		},
 		bnetFriend = {
@@ -39,21 +43,25 @@ local defaults = {
 				Enabled = true,
 				Sound = true,
 				Text = "Changes Game",
+				SoundFile = "swift-gesture",
 			},
 			ChangesCharacter = {
 				Enabled = true,
 				Sound = true,
 				Text = "Changes WoW Character",
+				SoundFile = "swift-gesture",
 			},
 			ChangesZone = {
 				Enabled = true,
 				Sound = false,
 				Text = "Changes WoW Zone",
+				SoundFile = "swift-gesture",
 			},
 			LevelsCharacter = {
 				Enabled = true,
 				Sound = false,
 				Text = "Levels WoW Character",
+				SoundFile = "so-proud",
 			},
 		},
 		friend = {
@@ -61,11 +69,13 @@ local defaults = {
 				Enabled = true,
 				Sound = false,
 				Text = "Changes WoW Zone",
+				SoundFile = "swift-gesture",
 			},
 			LevelsCharacter = {
 				Enabled = true,
 				Sound = false,
 				Text = "Levels WoW Character",
+				SoundFile = "so-proud",
 			},
 		},
 		guildMember = {
@@ -73,11 +83,13 @@ local defaults = {
 				Enabled = false,
 				Sound = false,
 				Text = "Changes WoW Zone",
+				SoundFile = "swift-gesture",
 			},
 			LevelsCharacter = {
 				Enabled = true,
 				Sound = false,
 				Text = "Levels WoW Character",
+				SoundFile = "so-proud",
 			},
 		},
 	},
@@ -87,9 +99,29 @@ local defaults = {
 	},
 
 	config = {
-		databaseVersion = 1,
+		databaseVersion = 2,
 	}
 }
+
+FR.sounds = {
+	["achievement"] = "Interface/Addons/FriendAlerts/Media/Sounds/achievement-message-tone.ogg",
+	["bubbling-up"] = "Interface/Addons/FriendAlerts/Media/Sounds/bubbling-up-530.ogg",
+	["emergence"] = "Interface/Addons/FriendAlerts/Media/Sounds/emergence-ringtone.ogg",
+	["hey"] = "Interface/Addons/FriendAlerts/Media/Sounds/girl-hey-ringtone.ogg",
+	["hmm"] = "Interface/Addons/FriendAlerts/Media/Sounds/hmm-second-alternative-ringtone.ogg",
+	["its-me-again"] = "Interface/Addons/FriendAlerts/Media/Sounds/its-me-again-girl-ringtone.ogg",
+	["jokingly"] = "Interface/Addons/FriendAlerts/Media/Sounds/jokingly-notification.ogg",
+	["just-saying"] = "Interface/Addons/FriendAlerts/Media/Sounds/just-saying-593.ogg",
+	["light"] = "Interface/Addons/FriendAlerts/Media/Sounds/light-562.ogg",
+	["pretty-good"] = "Interface/Addons/FriendAlerts/Media/Sounds/notification-pretty-good.ogg",
+	["swift-gesture"] = "Interface/Addons/FriendAlerts/Media/Sounds/notification-tone-swift-gesture.ogg",
+	["piece-of-cake"] = "Interface/Addons/FriendAlerts/Media/Sounds/piece-of-cake-611.ogg",
+	["served"] = "Interface/Addons/FriendAlerts/Media/Sounds/served-504.ogg",
+	["slick"] = "Interface/Addons/FriendAlerts/Media/Sounds/slick-notification.ogg",
+	["so-proud"] = "Interface/Addons/FriendAlerts/Media/Sounds/so-proud-notification.ogg",
+	["that-was-quick"] = "Interface/Addons/FriendAlerts/Media/Sounds/that-was-quick-606.ogg",
+	["when"] = "Interface/Addons/FriendAlerts/Media/Sounds/when-604.ogg",
+	};
 
 FR.icons = {
 	["App"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-Battlenet:14:14:0:0:30:30|t",
@@ -174,12 +206,12 @@ FR.Scan = function ()
 						if isFavorite and FriendAlertsDB.settings.notifications.bnetFavorite.ChangesGame.Enabled then
 							FR.Alert(FR.icons["Friend"] .. string.format("%s is now playing %s%s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game] or ""), (FR.games[game] or "Unknown")));
 
-							if FriendAlertsDB.settings.notifications.bnetFavorite.ChangesGame.Sound then PlaySound(18019) end
+							if FriendAlertsDB.settings.notifications.bnetFavorite.ChangesGame.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.bnetFavorite.ChangesGame.SoundFile], "Effects") end
 						end
 
 						if not isFavorite and FriendAlertsDB.settings.notifications.bnetFriend.ChangesGame.Enabled then
 							FR.Alert(FR.icons["Friend"] .. string.format("%s is now playing %s%s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game] or ""), (FR.games[game] or "Unknown")));
-							if FriendAlertsDB.settings.notifications.bnetFriend.ChangesGame.Sound then PlaySound(18019) end
+							if FriendAlertsDB.settings.notifications.bnetFriend.ChangesGame.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.bnetFriend.ChangesGame.SoundFile], "Effects") end
 						end
 
 						if not FR.icons[game] then
@@ -194,12 +226,12 @@ FR.Scan = function ()
 					if slug ~= FR.bnetFriends[bnetIDAccount]["characterSlug"] then
 						if isFavorite and FriendAlertsDB.settings.notifications.bnetFavorite.ChangesCharacter.Enabled then
 							FR.Alert(FR.icons["Friend"] .. string.format("%s is now playing %s (%s%s).", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game]), (FR.icons[factionName]), (slug)));
-							if FriendAlertsDB.settings.notifications.bnetFavorite.ChangesCharacter.Sound then PlaySound(18019) end
+							if FriendAlertsDB.settings.notifications.bnetFavorite.ChangesCharacter.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.bnetFavorite.ChangesCharacter.SoundFile], "Effects") end
 						end
 
 						if not isFavorite and FriendAlertsDB.settings.notifications.bnetFriend.ChangesCharacter.Enabled then
 							FR.Alert(FR.icons["Friend"] .. string.format("%s is now playing %s (%s%s).", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[game]), (FR.icons[factionName]), (slug)));
-							if FriendAlertsDB.settings.notifications.bnetFriend.ChangesCharacter.Sound then PlaySound(18019) end
+							if FriendAlertsDB.settings.notifications.bnetFriend.ChangesCharacter.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.bnetFriend.ChangesCharacter.SoundFile], "Effects") end
 						end
 						break
 					end
@@ -208,12 +240,12 @@ FR.Scan = function ()
 					if areaName ~= FR.bnetFriends[bnetIDAccount]["areaName"] then
 						if isFavorite and FriendAlertsDB.settings.notifications.bnetFavorite.ChangesZone.Enabled then
 							FR.Alert(FR.icons["Friend"] .. string.format("%s %s%s has entered %s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (slug), (areaName)));
-							if FriendAlertsDB.settings.notifications.bnetFavorite.ChangesZone.Sound then PlaySound(18019) end
+							if FriendAlertsDB.settings.notifications.bnetFavorite.ChangesZone.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.bnetFavorite.ChangesZone.SoundFile], "Effects") end
 						end
 
 						if not isFavorite and FriendAlertsDB.settings.notifications.bnetFriend.ChangesZone.Enabled then
 							FR.Alert(FR.icons["Friend"] .. string.format("%s %s%s has entered %s.", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (slug), (areaName)));
-							if FriendAlertsDB.settings.notifications.bnetFriend.ChangesZone.Sound then PlaySound(18019) end
+							if FriendAlertsDB.settings.notifications.bnetFriend.ChangesZone.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.bnetFriend.ChangesZone.SoundFile], "Effects") end
 						end
 						break
 					end
@@ -222,12 +254,12 @@ FR.Scan = function ()
 					if characterLevel ~= FR.bnetFriends[bnetIDAccount]["characterLevel"] then
 						if isFavorite and FriendAlertsDB.settings.notifications.bnetFavorite.LevelsCharacter.Enabled then
 							FR.Alert(FR.icons["Friend"] .. string.format("%s %s%s has reached level %d!", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (slug), (characterLevel)));
-							if FriendAlertsDB.settings.notifications.bnetFavorite.LevelsCharacter.Sound then PlaySound(18019) end
+							if FriendAlertsDB.settings.notifications.bnetFavorite.LevelsCharacter.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.bnetFavorite.LevelsCharacter.SoundFile], "Effects") end
 						end
 
 						if not isFavorite and FriendAlertsDB.settings.notifications.bnetFriend.LevelsCharacter.Enabled then
 							FR.Alert(FR.icons["Friend"] .. string.format("%s %s%s has reached level %d!", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (slug), (characterLevel)));
-							if FriendAlertsDB.settings.notifications.bnetFriend.LevelsCharacter.Sound then PlaySound(18019) end
+							if FriendAlertsDB.settings.notifications.bnetFriend.LevelsCharacter.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.bnetFriend.LevelsCharacter.SoundFile], "Effects") end
 						end
 						break
 					end
@@ -265,13 +297,13 @@ FR.Scan = function ()
 					-- Changes Zone in WoW
 					if FR.characterFriends[characterName]["area"] ~= areaName and FriendAlertsDB.settings.notifications.friend.ChangesZone.Enabled then
 						FR.Alert(string.format("|cffffff00%s has entered %s.", characterName, areaName));
-						if FriendAlertsDB.settings.notifications.friend.ChangesZone.Sound then PlaySound(18019) end
+						if FriendAlertsDB.settings.notifications.friend.ChangesZone.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.friend.ChangesZone.SoundFile], "Effects") end
 					end
 
 					-- Levels Character in WoW
 					if characterLevel ~= FR.characterFriends[characterName]["level"] and FriendAlertsDB.settings.notifications.friend.LevelsCharacter.Enabled then
 						FR.Alert(string.format("|cffffff00%s has reached %d!", characterName, characterLevel));
-						if FriendAlertsDB.settings.notifications.friend.LevelsCharacter.Sound then PlaySound(18019) end
+						if FriendAlertsDB.settings.notifications.friend.LevelsCharacter.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.friend.LevelsCharacter.SoundFile], "Effects") end
 					end
 				end
 				FR.characterFriends[characterName] = friendInfo or {};
@@ -295,13 +327,13 @@ FR.Scan = function ()
 				-- Changes Zone in WoW
 				if zone ~= FR.guildMembers[name]["zone"] and FriendAlertsDB.settings.notifications.guildMember.ChangesZone.Enabled then
 					FR.Alert(string.format("\124c0000FF98%s has entered %s.\124r", name, zone)); 
-					if FriendAlertsDB.settings.notifications.guildMember.ChangesZone.Sound then PlaySound(18019) end
+					if FriendAlertsDB.settings.notifications.guildMember.ChangesZone.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.guildMember.ChangesZone.SoundFile], "Effects") end
 				end
 
 				-- Levels Character in WoW
 				if level ~= FR.guildMembers[name]["level"] and FriendAlertsDB.settings.notifications.guildMember.LevelsCharacter.Enabled then
 					FR.Alert(string.format("\124c0000FF98%s has reached %d!\124r", name, level)); 
-					if FriendAlertsDB.settings.notifications.guildMember.LevelsCharacter.Sound then PlaySound(18019) end
+					if FriendAlertsDB.settings.notifications.guildMember.LevelsCharacter.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.guildMember.LevelsCharacter.SoundFile], "Effects") end
 				end
 			end
 
@@ -328,20 +360,31 @@ initFrame:SetScript("OnEvent", function(self, event, arg1)
 		--FriendAlertsDB = nil
 		if not FriendAlertsDB then
 			FriendAlertsDB = {
-				settings = CopyTable(defaults),
+				settings = CopyTable(FR.defaults),
 			}
 		end
 
 		-- Upgrade database if needed (currently just erase database if using an old version of the database, but allow for future upgrades by checking version number)
 		if not FriendAlertsDB.settings.config then
 			FriendAlertsDB = {
-				settings = CopyTable(defaults),
+				settings = CopyTable(FR.defaults),
 			}
+		end
+
+		-- Upgrade from database version 1 to 2
+		-- this version added custom sound choices for notifications
+		if FriendAlertsDB.settings.config.databaseVersion < 2 then
+			for k, v in pairs(FriendAlertsDB.settings.notifications) do
+				for kk, vv in pairs(v) do
+					FriendAlertsDB.settings.notifications[k][kk]["SoundFile"] = FR.defaults.notifications[k][kk]["SoundFile"]
+				end
+			end
+			FriendAlertsDB.settings.config.databaseVersion = 2
 		end
 
 		-- useful during development when adding new settings to database, be cautious though when adding new settings to an existing dictionary.
 		-- perhaps expand this to check for specific keys that are missing
-		for k, v in pairs(defaults) do
+		for k, v in pairs(FR.defaults) do
 			if FriendAlertsDB.settings[k] == nil then
 				FriendAlertsDB.settings[k] = v
 			end
@@ -389,6 +432,8 @@ loadingFrame:SetScript("OnEvent", function(self, event)
     if event == "PLAYER_ENTERING_WORLD" then
         Utils.Print("Addon Loaded. Version: " .. FR.version)
 		Utils.Debug("Testing");
+
+		--PlaySoundFile("Interface/Addons/FriendAlerts/Media/Sounds/emergence.ogg", "Effects")
         self:UnregisterEvent("PLAYER_ENTERING_WORLD")
     end
 end)

@@ -96,3 +96,32 @@ function UIHelper.CreateSlider(parent, name, label, min, max, step, defaultVal, 
 
     return slider, yPos - 50
 end
+
+function UIHelper.CreateDropdown(parent, name, options, defaultValue, xPos, yPos, callback)
+  
+    local dropdown = CreateFrame("Frame", name, parent, "UIDropDownMenuTemplate")
+    dropdown:SetPoint("TOPLEFT", xPos, yPos)
+    
+    local function Initialize(self, level)
+        for i, option in ipairs(options) do
+            local info = UIDropDownMenu_CreateInfo()
+            info.text = option.text
+            info.value = option.value
+            info.func = callback
+            UIDropDownMenu_AddButton(info, level)
+        end
+    end
+
+    UIDropDownMenu_Initialize(dropdown, Initialize)
+
+    -- Find the matching index to set the default value
+    for i, option in ipairs(options) do
+        if option.text == defaultValue then
+            UIDropDownMenu_SetSelectedID(dropdown, i)
+            selectedValue = option.value
+            break
+        end
+    end
+
+    return dropdown
+end

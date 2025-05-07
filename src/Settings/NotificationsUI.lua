@@ -61,6 +61,10 @@ function NotificationsUI:InitializeOptions()
 	headerBNetFavorite3:SetPoint("TOPLEFT", 350, yPos)
 	headerBNetFavorite3:SetText("Sound")
 
+    local headerBNetFavorite4 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	headerBNetFavorite4:SetPoint("TOPLEFT", 420, yPos)
+	headerBNetFavorite4:SetText("Sound File")
+
     yPos = yPos - 25
 
     local bnetFavoriteChangesGameText = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
@@ -97,6 +101,27 @@ function NotificationsUI:InitializeOptions()
                 FriendAlertsDB.settings.notifications.bnetFavorite[k]["Sound"] = self:GetChecked()
             end
         )
+
+        -- Sound Notification Dropdown
+        local category = "bnetFavorite"
+        local options = {}
+        for soundName, soundPath in pairs(FR.sounds) do
+            table.insert(options, { text = soundName, value = soundPath })
+        end
+        local defaultValue = FriendAlertsDB.settings.notifications[category][k]["SoundFile"]
+
+        local dropdown =nil
+        dropdown = UIHelper.CreateDropdown(panel, "Dropdown"..category..k, options, defaultValue, 400, yPos + 8, function(self)
+            UIDropDownMenu_SetSelectedID(dropdown, self:GetID())
+
+            PlaySoundFile(self.value, "Effects")
+            for kk, vv in pairs(FR.sounds) do
+                if vv == self.value then
+                    FriendAlertsDB.settings.notifications[category][k]["SoundFile"] = kk
+                    break
+                end
+            end
+        end)
         yPos = newY - 5
     end
     yPos = yPos - 10
@@ -117,6 +142,10 @@ function NotificationsUI:InitializeOptions()
     local headerBNetFriend3 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	headerBNetFriend3:SetPoint("TOPLEFT", 350, yPos)
 	headerBNetFriend3:SetText("Sound")
+
+    local headerBNetFriend4 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	headerBNetFriend4:SetPoint("TOPLEFT", 420, yPos)
+	headerBNetFriend4:SetText("Sound File")
 
     yPos = yPos - 25
 
@@ -154,6 +183,28 @@ function NotificationsUI:InitializeOptions()
                 FriendAlertsDB.settings.notifications.bnetFriend[k]["Sound"] = self:GetChecked()
             end
         )
+
+        -- Sound Notification Dropdown
+        local category = "bnetFriend"
+        local options = {}
+        for soundName, soundPath in pairs(FR.sounds) do
+            table.insert(options, { text = soundName, value = soundPath })
+        end
+        local defaultValue = FriendAlertsDB.settings.notifications[category][k]["SoundFile"]
+
+        local dropdown =nil
+        dropdown = UIHelper.CreateDropdown(panel, "Dropdown"..category..k, options, defaultValue, 400, yPos + 8, function(self)
+            UIDropDownMenu_SetSelectedID(dropdown, self:GetID())
+
+            PlaySoundFile(self.value, "Effects")
+            for kk, vv in pairs(FR.sounds) do
+                if vv == self.value then
+                    FriendAlertsDB.settings.notifications[category][k]["SoundFile"] = kk
+                    break
+                end
+            end
+        end)
+
         yPos = newY - 5
     end
     yPos = yPos - 10
@@ -174,6 +225,10 @@ function NotificationsUI:InitializeOptions()
     local headerFriend3 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	headerFriend3:SetPoint("TOPLEFT", 350, yPos)
 	headerFriend3:SetText("Sound")
+
+    local headerFriend4 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	headerFriend4:SetPoint("TOPLEFT", 420, yPos)
+	headerFriend4:SetText("Sound File")
 
     yPos = yPos - 25
 
@@ -211,6 +266,27 @@ function NotificationsUI:InitializeOptions()
                 FriendAlertsDB.settings.notifications.friend[k]["Sound"] = self:GetChecked()
             end
         )
+
+        -- Sound Notification Dropdown
+        local category = "friend"
+        local options = {}
+        for soundName, soundPath in pairs(FR.sounds) do
+            table.insert(options, { text = soundName, value = soundPath })
+        end
+        local defaultValue = FriendAlertsDB.settings.notifications[category][k]["SoundFile"]
+
+        local dropdown =nil
+        dropdown = UIHelper.CreateDropdown(panel, "Dropdown"..category..k, options, defaultValue, 400, yPos + 8, function(self)
+            UIDropDownMenu_SetSelectedID(dropdown, self:GetID())
+
+            PlaySoundFile(self.value, "Effects")
+            for kk, vv in pairs(FR.sounds) do
+                if vv == self.value then
+                    FriendAlertsDB.settings.notifications[category][k]["SoundFile"] = kk
+                    break
+                end
+            end
+        end)
         yPos = newY - 5
     end
     yPos = yPos - 10
@@ -231,6 +307,10 @@ function NotificationsUI:InitializeOptions()
     local headerGuildMember3 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	headerGuildMember3:SetPoint("TOPLEFT", 350, yPos)
 	headerGuildMember3:SetText("Sound")
+
+    local headerGuildMember4 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	headerGuildMember4:SetPoint("TOPLEFT", 420, yPos)
+	headerGuildMember4:SetText("Sound File")
 
     yPos = yPos - 25
 
@@ -268,9 +348,43 @@ function NotificationsUI:InitializeOptions()
                 FriendAlertsDB.settings.notifications.guildMember[k]["Sound"] = self:GetChecked()
             end
         )
+
+        -- Sound Notification Dropdown
+        local category = "guildMember"
+        local options = {}
+        for soundName, soundPath in pairs(FR.sounds) do
+            table.insert(options, { text = soundName, value = soundPath })
+        end
+        local defaultValue = FriendAlertsDB.settings.notifications[category][k]["SoundFile"]
+
+        local dropdown =nil
+        dropdown = UIHelper.CreateDropdown(panel, "Dropdown"..category..k, options, defaultValue, 400, yPos + 8, function(self)
+            UIDropDownMenu_SetSelectedID(dropdown, self:GetID())
+
+            PlaySoundFile(self.value, "Effects")
+            for kk, vv in pairs(FR.sounds) do
+                if vv == self.value then
+                    FriendAlertsDB.settings.notifications[category][k]["SoundFile"] = kk
+                    break
+                end
+            end
+        end)
+
         yPos = newY - 5
     end
     yPos = yPos - 10
+
+    local button = CreateFrame("Button", "MyAddonButton", panel, "GameMenuButtonTemplate")
+    button:SetPoint("TOPLEFT", 200, yPos)
+    button:SetSize(140, 30)
+    button:SetText("Reset to Defaults")
+
+    button:SetScript("OnClick", function()
+        Utils.Print("Settings have been reset to defaults. Please reload the UI to apply changes!")
+        FriendAlertsDB = {
+            settings = CopyTable(FR.defaults),
+        }
+    end)
 
     -- Register with the Interface Options
     local supportCategory = Settings.RegisterCanvasLayoutSubcategory(FR.mainCategory, panel, panel.name)

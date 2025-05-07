@@ -56,6 +56,12 @@ function AboutUI:InitializeOptions()
     thanksText:SetPoint("TOPLEFT", 16, -200)
     thanksText:SetText("Lovestoned-Hellscream, Pixiè-Kel'Thuzad, Riptide-Spinebreaker")
 
+    -- Sounds attribution
+    local additionalInfo = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
+    additionalInfo:SetPoint("BOTTOMRIGHT", -16, 50)
+    additionalInfo:SetJustifyH("RIGHT")
+    additionalInfo:SetText("Sound alerts provided by NotificationSounds.com under Creative Commons licenses.")
+
     -- Additional info at bottom
     local additionalInfo = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
     additionalInfo:SetPoint("BOTTOMRIGHT", -16, 16)
