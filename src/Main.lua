@@ -19,19 +19,19 @@ FR.defaults = {
 				Enabled = true,
 				Sound = true,
 				Text = "Changes Game",
-				SoundFile = "swift-gesture",
+				SoundFile = "bnet-toast",
 			},
 			ChangesCharacter = {
 				Enabled = true,
 				Sound = true,
 				Text = "Changes WoW Character",
-				SoundFile = "swift-gesture",
+				SoundFile = "bnet-toast",
 			},
 			ChangesZone = {
 				Enabled = true,
 				Sound = false,
 				Text = "Changes WoW Zone",
-				SoundFile = "swift-gesture",
+				SoundFile = "bnet-toast",
 			},
 			LevelsCharacter = {
 				Enabled = true,
@@ -45,19 +45,19 @@ FR.defaults = {
 				Enabled = true,
 				Sound = true,
 				Text = "Changes Game",
-				SoundFile = "swift-gesture",
+				SoundFile = "bnet-toast",
 			},
 			ChangesCharacter = {
 				Enabled = true,
 				Sound = true,
 				Text = "Changes WoW Character",
-				SoundFile = "swift-gesture",
+				SoundFile = "bnet-toast",
 			},
 			ChangesZone = {
 				Enabled = true,
 				Sound = false,
 				Text = "Changes WoW Zone",
-				SoundFile = "swift-gesture",
+				SoundFile = "bnet-toast",
 			},
 			LevelsCharacter = {
 				Enabled = true,
@@ -71,7 +71,7 @@ FR.defaults = {
 				Enabled = true,
 				Sound = false,
 				Text = "Changes WoW Zone",
-				SoundFile = "swift-gesture",
+				SoundFile = "bnet-toast",
 			},
 			LevelsCharacter = {
 				Enabled = true,
@@ -85,7 +85,7 @@ FR.defaults = {
 				Enabled = false,
 				Sound = false,
 				Text = "Changes WoW Zone",
-				SoundFile = "swift-gesture",
+				SoundFile = "bnet-toast",
 			},
 			LevelsCharacter = {
 				Enabled = true,
@@ -106,6 +106,7 @@ FR.defaults = {
 }
 
 FR.sounds = {
+	["bnet-toast"] = "Interface/Addons/FriendAlerts/Media/Sounds/ui_bnettoast.ogg",
 	["achievement"] = "Interface/Addons/FriendAlerts/Media/Sounds/achievement-message-tone.ogg",
 	["bubbling-up"] = "Interface/Addons/FriendAlerts/Media/Sounds/bubbling-up-530.ogg",
 	["emergence"] = "Interface/Addons/FriendAlerts/Media/Sounds/emergence-ringtone.ogg",
