@@ -448,6 +448,14 @@ end)
 -- Slash Commands
 SLASH_FRIENDALERTS1 = "/fa"
 SLASH_FRIENDALERTS2 = "/friendalerts"
-SlashCmdList["FRIENDALERTS"] = function()
+SlashCmdList["FRIENDALERTS"] = function(msg)
+	if msg == "reset" then
+		FriendAlertsDB = nil
+		FriendAlertsDB = {
+			settings = CopyTable(FR.defaults),
+		}
+		Utils.Print("Settings have been reset to defaults. Please reload the UI to apply changes!")
+		return
+	end
     Settings.OpenToCategory("FriendAlerts")
 end
