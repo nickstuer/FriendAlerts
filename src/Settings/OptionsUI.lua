@@ -6,6 +6,9 @@ FR.UIHelper = UIHelper
 local OptionsUI = {}
 FR.OptionsUI = OptionsUI
 
+local Utils = FR.Utils or {}
+FR.Utils = Utils
+
 function OptionsUI:InitializeOptions()
 
     local panel = CreateFrame("Frame")

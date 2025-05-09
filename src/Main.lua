@@ -35,7 +35,7 @@ FR.defaults = {
 			},
 			LevelsCharacter = {
 				Enabled = true,
-				Sound = false,
+				Sound = true,
 				Text = "Levels WoW Character",
 				SoundFile = "so-proud",
 			},
