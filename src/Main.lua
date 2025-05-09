@@ -257,7 +257,7 @@ FR.Scan = function ()
 					end
 
 					-- Levels Character in WoW
-					if characterLevel ~= FR.bnetFriends[bnetIDAccount]["characterLevel"] then
+					if characterLevel ~= FR.bnetFriends[bnetIDAccount]["characterLevel"] and characterLevel > 1 then
 						FR.bNetCharacterSlugs[slug] = true
 						if isFavorite and FriendAlertsDB.settings.notifications.bnetFavorite.LevelsCharacter.Enabled then
 							FR.Alert(FR.icons["Friend"] .. string.format("%s %s%s has reached level %d!", FR.WhisperLink(accountName, bnetIDAccount), (FR.icons[factionName]), (slug), (characterLevel)));
@@ -314,7 +314,7 @@ FR.Scan = function ()
 					end
 
 					-- Levels Character in WoW
-					if characterLevel ~= FR.characterFriends[characterName]["level"] and FriendAlertsDB.settings.notifications.friend.LevelsCharacter.Enabled and not FR.bNetCharacterSlugs[guid] then
+					if characterLevel ~= FR.characterFriends[characterName]["level"] and FriendAlertsDB.settings.notifications.friend.LevelsCharacter.Enabled and not FR.bNetCharacterSlugs[guid] and characterLevel > 1  then
 						FR.Alert(string.format("|cffffff00%s has reached %d!", characterName, characterLevel));
 						if FriendAlertsDB.settings.notifications.friend.LevelsCharacter.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.friend.LevelsCharacter.SoundFile], "Effects") end
 					end
@@ -344,7 +344,7 @@ FR.Scan = function ()
 				end
 
 				-- Levels Character in WoW
-				if level ~= FR.guildMembers[name]["level"] and FriendAlertsDB.settings.notifications.guildMember.LevelsCharacter.Enabled then
+				if level ~= FR.guildMembers[name]["level"] and FriendAlertsDB.settings.notifications.guildMember.LevelsCharacter.Enabled and level > 1  then
 					FR.Alert(string.format("\124c0000FF98%s has reached %d!\124r", name, level)); 
 					if FriendAlertsDB.settings.notifications.guildMember.LevelsCharacter.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.guildMember.LevelsCharacter.SoundFile], "Effects") end
 				end
