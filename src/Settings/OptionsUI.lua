@@ -45,7 +45,25 @@ function OptionsUI:InitializeOptions()
             FriendAlertsDB.settings.options.scanInterval = value
         end
     )
-    yPos = newY
+    yPos = newY - 10
+    -- Add separator
+	local _, newY = UIHelper.CreateSeparator(panel, 16, yPos)
+	yPos = newY - 10
+    -- Reset Settings
+    local header, newY = UIHelper.CreateSectionHeader(panel, "Default Settings", 16, yPos)
+    yPos = newY - 5
+
+    local button = CreateFrame("Button", "MyAddonButton", panel, "GameMenuButtonTemplate")
+    button:SetPoint("TOPLEFT", 50, yPos)
+    button:SetSize(140, 30)
+    button:SetText("Reset to Defaults")
+
+    button:SetScript("OnClick", function()
+        Utils.Print("Settings have been reset to defaults. Please reload the UI to apply changes!")
+        FriendAlertsDB = {
+            settings = CopyTable(FR.defaults),
+        }
+    end)
 
     -- Register with the Interface Options
     local supportCategory = Settings.RegisterCanvasLayoutSubcategory(FR.mainCategory, panel, panel.name)

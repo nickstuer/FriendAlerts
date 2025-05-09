@@ -30,55 +30,65 @@ function NotificationsUI:InitializeOptions()
     local panel = CreateFrame("Frame")
     panel.name = "Notifications"
 
+    -- Scrollbar
+    local scrollFrame = CreateFrame("ScrollFrame", nil, panel, "UIPanelScrollFrameTemplate")
+    scrollFrame:SetPoint("TOPLEFT", 3, -4)
+    scrollFrame:SetPoint("BOTTOMRIGHT", -27, 4)
+    local scrollChild = CreateFrame("Frame")
+    scrollFrame:SetScrollChild(scrollChild)
+    scrollChild:SetWidth(600)
+    scrollChild:SetHeight(1) 
+
+
 	local yPos = -16
 
   	-- Tab header and description
-	local title = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	local title = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	title:SetPoint("TOPLEFT", 16, yPos)
 	title:SetText("Notifications Settings")
 	title:SetTextColor(1, 0.84, 0)
 	yPos = yPos - 25
 
-	local subtitle = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+	local subtitle = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 	subtitle:SetPoint("TOPLEFT", 16, yPos)
 	subtitle:SetText("Allows you to configure notifications for friends/guildies entering new games or zones.")
 	yPos = yPos - 25
 
 	-- Add separator
-	local _, newY = UIHelper.CreateSeparator(panel, 16, yPos)
+	local _, newY = UIHelper.CreateSeparator(scrollChild, 16, yPos)
 	yPos = newY
 
     -- Battle.net Favorite Notifications
-    local headerBNetFavorite1 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    local headerBNetFavorite1 = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	headerBNetFavorite1:SetPoint("TOPLEFT", 16, yPos)
 	headerBNetFavorite1:SetText("Battle.net Favorite")
 
-    local headerBNetFavorite2 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    local headerBNetFavorite2 = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	headerBNetFavorite2:SetPoint("TOPLEFT", 300, yPos)
 	headerBNetFavorite2:SetText("Text")
 
-    local headerBNetFavorite3 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    local headerBNetFavorite3 = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	headerBNetFavorite3:SetPoint("TOPLEFT", 350, yPos)
 	headerBNetFavorite3:SetText("Sound")
 
-    local headerBNetFavorite4 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    local headerBNetFavorite4 = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	headerBNetFavorite4:SetPoint("TOPLEFT", 420, yPos)
 	headerBNetFavorite4:SetText("Sound File")
 
     yPos = yPos - 25
 
-    local bnetFavoriteChangesGameText = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    local bnetFavoriteChangesGameText = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormal")
     bnetFavoriteChangesGameText:SetPoint("TOPLEFT", 16, yPos)
     bnetFavoriteChangesGameText:SetText(settingsName[k] or k)
 
     for k, v in pairs(FriendAlertsDB.settings.notifications.bnetFavorite) do
-        local option = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local option = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         option:SetPoint("TOPLEFT", 16, yPos)
         option:SetText(FriendAlertsDB.settings.notifications.bnetFavorite[k]["Text"])
 
         -- Text Notification Checkbox
         local _, _ = UIHelper.CreateCheckbox(
-            panel,
+            scrollChild,
             "CheckboxBNetFavoriteText" .. k,
             "",
             300,
@@ -91,7 +101,7 @@ function NotificationsUI:InitializeOptions()
 
         -- Sound Checkbox
         local _, newY = UIHelper.CreateCheckbox(
-            panel,
+            scrollChild,
             "CheckboxBNetFavoriteSound" .. k,
             "",
             350,
@@ -111,7 +121,7 @@ function NotificationsUI:InitializeOptions()
         local defaultValue = FriendAlertsDB.settings.notifications[category][k]["SoundFile"]
 
         local dropdown =nil
-        dropdown = UIHelper.CreateDropdown(panel, "Dropdown"..category..k, options, defaultValue, 400, yPos + 8, function(self)
+        dropdown = UIHelper.CreateDropdown(scrollChild, "Dropdown"..category..k, options, defaultValue, 400, yPos + 8, function(self)
             UIDropDownMenu_SetSelectedID(dropdown, self:GetID())
 
             PlaySoundFile(self.value, "Effects")
@@ -127,40 +137,40 @@ function NotificationsUI:InitializeOptions()
     yPos = yPos - 10
 
     -- Add separator
-	local _, newY = UIHelper.CreateSeparator(panel, 16, yPos)
+	local _, newY = UIHelper.CreateSeparator(scrollChild, 16, yPos)
 	yPos = newY
 
     -- Battle.net Friend Notifications
-    local headerBNetFriend1 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    local headerBNetFriend1 = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	headerBNetFriend1:SetPoint("TOPLEFT", 16, yPos)
 	headerBNetFriend1:SetText("Battle.net Friend")
 
-    local headerBNetFriend2 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    local headerBNetFriend2 = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	headerBNetFriend2:SetPoint("TOPLEFT", 300, yPos)
 	headerBNetFriend2:SetText("Text")
 
-    local headerBNetFriend3 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    local headerBNetFriend3 = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	headerBNetFriend3:SetPoint("TOPLEFT", 350, yPos)
 	headerBNetFriend3:SetText("Sound")
 
-    local headerBNetFriend4 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    local headerBNetFriend4 = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	headerBNetFriend4:SetPoint("TOPLEFT", 420, yPos)
 	headerBNetFriend4:SetText("Sound File")
 
     yPos = yPos - 25
 
-    local bnetFriendChangesGameText = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    local bnetFriendChangesGameText = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormal")
     bnetFriendChangesGameText:SetPoint("TOPLEFT", 16, yPos)
     bnetFriendChangesGameText:SetText(settingsName[k] or k)
 
     for k, v in pairs(FriendAlertsDB.settings.notifications.bnetFriend) do
-        local option = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local option = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         option:SetPoint("TOPLEFT", 16, yPos)
         option:SetText(FriendAlertsDB.settings.notifications.bnetFriend[k]["Text"])
 
         -- Text Notification Checkbox
         local _, _ = UIHelper.CreateCheckbox(
-            panel,
+            scrollChild,
             "CheckboxBNetFriendText" .. k,
             "",
             300,
@@ -173,7 +183,7 @@ function NotificationsUI:InitializeOptions()
 
         -- Sound Checkbox
         local _, newY = UIHelper.CreateCheckbox(
-            panel,
+            scrollChild,
             "CheckboxBNetFriendSound" .. k,
             "",
             350,
@@ -193,7 +203,7 @@ function NotificationsUI:InitializeOptions()
         local defaultValue = FriendAlertsDB.settings.notifications[category][k]["SoundFile"]
 
         local dropdown =nil
-        dropdown = UIHelper.CreateDropdown(panel, "Dropdown"..category..k, options, defaultValue, 400, yPos + 8, function(self)
+        dropdown = UIHelper.CreateDropdown(scrollChild, "Dropdown"..category..k, options, defaultValue, 400, yPos + 8, function(self)
             UIDropDownMenu_SetSelectedID(dropdown, self:GetID())
 
             PlaySoundFile(self.value, "Effects")
@@ -210,40 +220,40 @@ function NotificationsUI:InitializeOptions()
     yPos = yPos - 10
 
     -- Add separator
-	local _, newY = UIHelper.CreateSeparator(panel, 16, yPos)
+	local _, newY = UIHelper.CreateSeparator(scrollChild, 16, yPos)
 	yPos = newY
 
     -- Character Friend Notifications
-    local headerFriend1 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    local headerFriend1 = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	headerFriend1:SetPoint("TOPLEFT", 16, yPos)
 	headerFriend1:SetText("Character Friend")
 
-    local headerFriend2 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    local headerFriend2 = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	headerFriend2:SetPoint("TOPLEFT", 300, yPos)
 	headerFriend2:SetText("Text")
 
-    local headerFriend3 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    local headerFriend3 = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	headerFriend3:SetPoint("TOPLEFT", 350, yPos)
 	headerFriend3:SetText("Sound")
 
-    local headerFriend4 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    local headerFriend4 = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	headerFriend4:SetPoint("TOPLEFT", 420, yPos)
 	headerFriend4:SetText("Sound File")
 
     yPos = yPos - 25
 
-    local friendChangesGameText = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    local friendChangesGameText = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormal")
     friendChangesGameText:SetPoint("TOPLEFT", 16, yPos)
     friendChangesGameText:SetText(settingsName[k] or k)
 
     for k, v in pairs(FriendAlertsDB.settings.notifications.friend) do
-        local option = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local option = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         option:SetPoint("TOPLEFT", 16, yPos)
         option:SetText(FriendAlertsDB.settings.notifications.friend[k]["Text"])
 
         -- Text Notification Checkbox
         local _, _ = UIHelper.CreateCheckbox(
-            panel,
+            scrollChild,
             "CheckboxFriendText" .. k,
             "",
             300,
@@ -256,7 +266,7 @@ function NotificationsUI:InitializeOptions()
 
         -- Sound Checkbox
         local _, newY = UIHelper.CreateCheckbox(
-            panel,
+            scrollChild,
             "CheckboxFriendSound" .. k,
             "",
             350,
@@ -276,7 +286,7 @@ function NotificationsUI:InitializeOptions()
         local defaultValue = FriendAlertsDB.settings.notifications[category][k]["SoundFile"]
 
         local dropdown =nil
-        dropdown = UIHelper.CreateDropdown(panel, "Dropdown"..category..k, options, defaultValue, 400, yPos + 8, function(self)
+        dropdown = UIHelper.CreateDropdown(scrollChild, "Dropdown"..category..k, options, defaultValue, 400, yPos + 8, function(self)
             UIDropDownMenu_SetSelectedID(dropdown, self:GetID())
 
             PlaySoundFile(self.value, "Effects")
@@ -292,40 +302,40 @@ function NotificationsUI:InitializeOptions()
     yPos = yPos - 10
 
     -- Add separator
-	local _, newY = UIHelper.CreateSeparator(panel, 16, yPos)
+	local _, newY = UIHelper.CreateSeparator(scrollChild, 16, yPos)
 	yPos = newY
 
     -- Guild Member Notifications
-    local headerGuildMember1 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    local headerGuildMember1 = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	headerGuildMember1:SetPoint("TOPLEFT", 16, yPos)
 	headerGuildMember1:SetText("Guild Member")
 
-    local headerGuildMember2 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    local headerGuildMember2 = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	headerGuildMember2:SetPoint("TOPLEFT", 300, yPos)
 	headerGuildMember2:SetText("Text")
 
-    local headerGuildMember3 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    local headerGuildMember3 = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	headerGuildMember3:SetPoint("TOPLEFT", 350, yPos)
 	headerGuildMember3:SetText("Sound")
 
-    local headerGuildMember4 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    local headerGuildMember4 = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	headerGuildMember4:SetPoint("TOPLEFT", 420, yPos)
 	headerGuildMember4:SetText("Sound File")
 
     yPos = yPos - 25
 
-    local guildMemberChangesGameText = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    local guildMemberChangesGameText = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormal")
     guildMemberChangesGameText:SetPoint("TOPLEFT", 16, yPos)
     guildMemberChangesGameText:SetText(settingsName[k] or k)
 
     for k, v in pairs(FriendAlertsDB.settings.notifications.guildMember) do
-        local option = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local option = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         option:SetPoint("TOPLEFT", 16, yPos)
         option:SetText(FriendAlertsDB.settings.notifications.guildMember[k]["Text"])
 
         -- Text Notification Checkbox
         local _, _ = UIHelper.CreateCheckbox(
-            panel,
+            scrollChild,
             "CheckboxGuildMemberText" .. k,
             "",
             300,
@@ -338,7 +348,7 @@ function NotificationsUI:InitializeOptions()
 
         -- Sound Checkbox
         local _, newY = UIHelper.CreateCheckbox(
-            panel,
+            scrollChild,
             "CheckboxGuildMemberSound" .. k,
             "",
             350,
@@ -358,7 +368,7 @@ function NotificationsUI:InitializeOptions()
         local defaultValue = FriendAlertsDB.settings.notifications[category][k]["SoundFile"]
 
         local dropdown =nil
-        dropdown = UIHelper.CreateDropdown(panel, "Dropdown"..category..k, options, defaultValue, 400, yPos + 8, function(self)
+        dropdown = UIHelper.CreateDropdown(scrollChild, "Dropdown"..category..k, options, defaultValue, 400, yPos + 8, function(self)
             UIDropDownMenu_SetSelectedID(dropdown, self:GetID())
 
             PlaySoundFile(self.value, "Effects")
@@ -373,18 +383,6 @@ function NotificationsUI:InitializeOptions()
         yPos = newY - 5
     end
     yPos = yPos - 10
-
-    local button = CreateFrame("Button", "MyAddonButton", panel, "GameMenuButtonTemplate")
-    button:SetPoint("TOPLEFT", 200, yPos)
-    button:SetSize(140, 30)
-    button:SetText("Reset to Defaults")
-
-    button:SetScript("OnClick", function()
-        Utils.Print("Settings have been reset to defaults. Please reload the UI to apply changes!")
-        FriendAlertsDB = {
-            settings = CopyTable(FR.defaults),
-        }
-    end)
 
     -- Register with the Interface Options
     local supportCategory = Settings.RegisterCanvasLayoutSubcategory(FR.mainCategory, panel, panel.name)
