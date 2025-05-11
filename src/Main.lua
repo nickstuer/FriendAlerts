@@ -98,6 +98,7 @@ FR.defaults = {
 
 	options = {
 		scanInterval = 3, -- in seconds
+		onLoginMessage = true,
 	},
 
 	config = {
@@ -395,6 +396,13 @@ initFrame:SetScript("OnEvent", function(self, event, arg1)
 			FriendAlertsDB.settings.config.databaseVersion = 2
 		end
 
+		-- Upgrade from database version 2 to 3
+		-- added option to enable/disable the 'Addon Loaded' message at login
+		if FriendAlertsDB.settings.config.databaseVersion < 3 then
+			FriendAlertsDB.settings.options.onLoginMessage = FriendAlertsDB.settings.options.onLoginMessage or FR.defaults.options.onLoginMessage
+			FriendAlertsDB.settings.config.databaseVersion = 3
+		end
+
 		-- useful during development when adding new settings to database, be cautious though when adding new settings to an existing dictionary.
 		-- perhaps expand this to check for specific keys that are missing
 		for k, v in pairs(FR.defaults) do
@@ -443,8 +451,11 @@ local loadingFrame = CreateFrame("Frame")
 loadingFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 loadingFrame:SetScript("OnEvent", function(self, event)
     if event == "PLAYER_ENTERING_WORLD" then
-        Utils.Print("Addon Loaded. Version: " .. FR.version)
-		Utils.Debug("Testing");
+        if FriendAlertsDB.settings.options.onLoginMessage then
+			Utils.Print("Addon Loaded. Version: " .. FR.version)
+		end
+		
+		Utils.Debug("Debug Mode is Enabled");
 
 		--PlaySoundFile("Interface/Addons/FriendAlerts/Media/Sounds/emergence.ogg", "Effects")
         self:UnregisterEvent("PLAYER_ENTERING_WORLD")

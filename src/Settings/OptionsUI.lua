@@ -32,7 +32,7 @@ function OptionsUI:InitializeOptions()
 	local _, newY = UIHelper.CreateSeparator(panel, 16, yPos)
 	yPos = newY
 
-    -- SECTION 2: Notification Settings
+    -- SECTION 2: Scan Rate Settings
     local header, newY = UIHelper.CreateSectionHeader(panel, "Scan Rate Settings", 16, yPos)
     yPos = newY - 5
 
@@ -49,17 +49,43 @@ function OptionsUI:InitializeOptions()
         end
     )
     yPos = newY - 10
+
     -- Add separator
 	local _, newY = UIHelper.CreateSeparator(panel, 16, yPos)
 	yPos = newY - 10
-    -- Reset Settings
-    local header, newY = UIHelper.CreateSectionHeader(panel, "Default Settings", 16, yPos)
-    yPos = newY - 5
+
+    -- SECTION: General Settings
+     -- Battle.net Friend Notifications
+    local h1 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	h1:SetPoint("TOPLEFT", 16, yPos)
+	h1:SetText("General Settings")
+    yPos = yPos - 25
+
+    local onLoginText = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    onLoginText:SetPoint("TOPLEFT", 36, yPos)
+    onLoginText:SetText("Display 'Addon Loaded' Message")
+     -- Text Notification Checkbox
+    local _, _ = UIHelper.CreateCheckbox(
+        panel,
+        "CheckboxBNetFriendText" ,
+        "",
+        250,
+        yPos + 7,
+        FriendAlertsDB.settings.options.onLoginMessage,
+        function(self)
+            FriendAlertsDB.settings.options.onLoginMessage = self:GetChecked()
+        end
+    )
+
+    yPos = yPos - 35
+    -- Add separator
+	local _, newY = UIHelper.CreateSeparator(panel, 16, yPos)
+	yPos = newY - 50
 
     local button = CreateFrame("Button", "MyAddonButton", panel, "GameMenuButtonTemplate")
-    button:SetPoint("TOPLEFT", 50, yPos)
-    button:SetSize(140, 30)
-    button:SetText("Reset to Defaults")
+    button:SetPoint("TOPLEFT", 150, yPos)
+    button:SetSize(200, 30)
+    button:SetText("Reset All Settings to Defaults")
 
     button:SetScript("OnClick", function()
         Utils.Print("Settings have been reset to defaults. Please reload the UI to apply changes!")
