@@ -136,7 +136,7 @@ FR.icons = {
 	["WTCG"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-WTCG:16|t",
 	["Hero"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-HotS:16|t",
 	["Pro"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-Overwatch:16|t",
-	["Fen"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-Diablo4:16|t",
+	["Fen"] = "|Tinterface/chatframe/ui-chaticon-diabloimmortal.blp:16|t",
 };
 
 FR.games = {
