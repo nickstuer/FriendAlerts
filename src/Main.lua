@@ -11,6 +11,8 @@ FR.guildMembers = {};
 
 FR.bNetCharacterSlugs = {}; -- To temporarily store character slugs for battle.net friends to avoid duplicate notifications
 
+local playerFullName = Utils.GetFullPlayerName()
+
 -- Default settings
 FR.defaults = {
 	notifications = {
@@ -337,7 +339,7 @@ FR.Scan = function ()
 		for index = 1, numTotal do
 			local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile, isSoREligible, standingID, playerGuid = GetGuildRosterInfo(index);
 
-			if name and online and FR.guildMembers[name] and not FR.bNetCharacterSlugs[playerGuid] then
+			if name and online and FR.guildMembers[name] and not FR.bNetCharacterSlugs[playerGuid] and (playerFullName ~= name) then
 				-- Changes Zone in WoW
 				if zone ~= FR.guildMembers[name]["zone"] and FriendAlertsDB.settings.notifications.guildMember.ChangesZone.Enabled then
 					FR.Alert(string.format("\124c0000FF98%s has entered %s.\124r", name, zone)); 
@@ -345,7 +347,7 @@ FR.Scan = function ()
 				end
 
 				-- Levels Character in WoW
-				if level ~= FR.guildMembers[name]["level"] and FriendAlertsDB.settings.notifications.guildMember.LevelsCharacter.Enabled and level > 1 and not FR.bNetCharacterSlugs[playerGuid]  then
+				if level ~= FR.guildMembers[name]["level"] and FriendAlertsDB.settings.notifications.guildMember.LevelsCharacter.Enabled and level > 1 then
 					FR.Alert(string.format("\124c0000FF98%s has reached %d!\124r", name, level)); 
 					if FriendAlertsDB.settings.notifications.guildMember.LevelsCharacter.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.guildMember.LevelsCharacter.SoundFile], "Effects") end
 				end
