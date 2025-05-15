@@ -18,4 +18,26 @@ function Utils.GetFullPlayerName()
     return name .. "-" .. realm:gsub("%s+", "")
 end
 
+function Utils.Trim(s)
+    if type(s) ~= "string" then return "" end
+    return s:match("^%s*(.-)%s*$") or ""
+end
+
+
+function Utils.SplitByCommas(str)
+    local results = {}
+
+    if type(str) ~= "string" then
+        return results
+    end
+    
+    for part in string.gmatch(str, "([^,]+)") do
+        local trimmed = Utils.Trim(part)
+        if trimmed ~= "" then
+            table.insert(results, trimmed)
+        end
+    end
+    return results
+end
+
 return Utils
