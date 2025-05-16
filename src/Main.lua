@@ -140,6 +140,7 @@ FR.icons = {
 	["Hero"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-HotS:16|t",
 	["Pro"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-Overwatch:16|t",
 	["Fen"] = "|Tinterface/chatframe/ui-chaticon-diabloimmortal.blp:16|t",
+	["Neutral"] = "|Tinterface/icons/inv_misc_questionmark.blp:16|t"
 };
 
 FR.games = {
