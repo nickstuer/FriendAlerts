@@ -7,14 +7,16 @@ A World of Warcraft addon for Battle.net style alerts when friends/guildies chan
 
 ## Table of Contents
 
-- [Features](https://github.com/nickstuer/blizzapi?tab=readme-ov-file#-features)
-- [Install](https://github.com/nickstuer/blizzapi?tab=readme-ov-file#-install)
-- [Usage](https://github.com/nickstuer/blizzapi?tab=readme-ov-file#-usage)
-- [Development](https://github.com/nickstuer/blizzapi?tab=readme-ov-file#-development)
-- [Contributing](https://github.com/nickstuer/blizzapi?tab=readme-ov-file#-contributing)
+- [Features](https://github.com/nickstuer/friendalerts?tab=readme-ov-file#-features)
+- [Install](https://github.com/nickstuer/friendalerts?tab=readme-ov-file#-install)
+- [Usage](https://github.com/nickstuer/friendalerts?tab=readme-ov-file#-usage)
+- [Development](https://github.com/nickstuer/friendalerts?tab=readme-ov-file#-development)
+- [Contributing](https://github.com/nickstuer/friendalerts?tab=readme-ov-file#-contributing)
 
-## 📌 Example
+## 📌 Examples
 ![Example Alert](images/example.png)
+
+![Example Alert2](images/example2.png)
 
 ## 📖 Features
 
@@ -39,6 +41,7 @@ Quickly configure the alerts to avoid chat spam. Select between Battle.net Favor
 | World Of Warcraft (Retail)            | Supported                           |
 | World Of Warcraft (Classic)           | Supported                           |
 | World of Warcraft (Classic Era)       | Supported                           |
+| Diablo IV                             | Supported                           |
 | Hearthstone                           | Supported                           |
 | Heroes of the Storm                   | Supported                           |
 | Overwatch                             | Supported                           |
@@ -78,6 +81,8 @@ Helpful links for developing or contributing to the addon.
 [Icon String Format](https://www.wowinterface.com/forums/showthread.php?t=46221)
 
 [Chat Icons](https://wago.tools/files?search=chaticon)
+
+[WoW Tools](https://old.wow.tools/files/#search=chat%2Ctype%3Aogg&page=1&sort=0&desc=asc)
 
 #### Deploy
 This copies the addon files to the appropriate World of Warcraft addons folder.
