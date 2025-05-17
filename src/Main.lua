@@ -104,7 +104,7 @@ FR.defaults = {
 	},
 
 	config = {
-		databaseVersion = 2,
+		databaseVersion = 3,
 	}
 }
 
