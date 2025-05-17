@@ -1,4 +1,4 @@
-## Interface: 110100
+## Interface: 110105
 ## Title: FriendAlerts
 ## Version: 2.1.3
 ## Author: Nick Stuer
