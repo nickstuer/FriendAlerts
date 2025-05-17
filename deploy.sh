@@ -12,8 +12,8 @@ while IFS= read -r line1; do
 
 done < $sourceFile
 
+# Retail WoW
 echo "Deploying $addonName"
-
 ADDON_PATH="/Applications/World of Warcraft/_retail_/Interface/AddOns/${addonName}"
 ADDON_PATH_WINDOWS="C:\Program Files (x86)\World of Warcraft\_retail_\Interface\AddOns\\${addonName}"
 
@@ -29,4 +29,41 @@ cp -R -a "src/." "${ADDON_PATH}";
 cp -R "README.md" "${ADDON_PATH}/README.md";
 
 echo "Successfully deployed to $ADDON_PATH"
+
+# Classic Cata WoW
+echo "Deploying $addonName"
+ADDON_PATH="/Applications/World of Warcraft/_classic_/Interface/AddOns/${addonName}"
+ADDON_PATH_WINDOWS="C:\Program Files (x86)\World of Warcraft\_classic_\Interface\AddOns\\${addonName}"
+
+if [ "$OSTYPE" == "msys" ]; then
+    ADDON_PATH="$ADDON_PATH_WINDOWS"
+fi
+echo "Using path: $ADDON_PATH"
+
+rm -vrf "$ADDON_PATH" | echo "$(wc -l) files deleted"
+mkdir -p "$ADDON_PATH"
+
+cp -R -a "src/." "${ADDON_PATH}";
+cp -R "README.md" "${ADDON_PATH}/README.md";
+
+echo "Successfully deployed to $ADDON_PATH"
+
+# Classic  WoW
+echo "Deploying $addonName"
+ADDON_PATH="/Applications/World of Warcraft/_classic_era_/Interface/AddOns/${addonName}"
+ADDON_PATH_WINDOWS="C:\Program Files (x86)\World of Warcraft\_classic_era_\Interface\AddOns\\${addonName}"
+
+if [ "$OSTYPE" == "msys" ]; then
+    ADDON_PATH="$ADDON_PATH_WINDOWS"
+fi
+echo "Using path: $ADDON_PATH"
+
+rm -vrf "$ADDON_PATH" | echo "$(wc -l) files deleted"
+mkdir -p "$ADDON_PATH"
+
+cp -R -a "src/." "${ADDON_PATH}";
+cp -R "README.md" "${ADDON_PATH}/README.md";
+
+echo "Successfully deployed to $ADDON_PATH"
 exit
+
