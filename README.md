@@ -41,6 +41,7 @@ Quickly configure the alerts to avoid chat spam. Select between Battle.net Favor
 | World Of Warcraft (Retail)            | Supported                           |
 | World Of Warcraft (Classic)           | Supported                           |
 | World of Warcraft (Classic Era)       | Supported                           |
+| Diablo III                            | Supported                           |
 | Diablo IV                             | Supported                           |
 | Hearthstone                           | Supported                           |
 | Heroes of the Storm                   | Supported                           |

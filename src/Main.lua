@@ -139,6 +139,7 @@ FR.icons = {
 	["WTCG"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-WTCG:16|t",
 	["Hero"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-HotS:16|t",
 	["Pro"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-Overwatch:16|t",
+	["D3"] = "|Tinterface/chatframe/ui-chaticon-d3.blp:16|t",
 	["Fen"] = "|Tinterface/chatframe/ui-chaticon-diabloimmortal.blp:16|t",
 	["Neutral"] = "|Tinterface/icons/inv_misc_questionmark.blp:16|t"
 };
@@ -150,6 +151,7 @@ FR.games = {
 	["WTCG"] = "Hearthstone",
 	["Hero"] = "Heroes of the Storm",
 	["Pro"] = "Overwatch",
+	["D3"] = "Diablo III",
 	["Fen"] = "Diablo IV",
 };
 
