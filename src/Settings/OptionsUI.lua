@@ -56,10 +56,8 @@ function OptionsUI:InitializeOptions()
 
     -- SECTION: General Settings
      -- Battle.net Friend Notifications
-    local h1 = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-	h1:SetPoint("TOPLEFT", 16, yPos)
-	h1:SetText("General Settings")
-    yPos = yPos - 25
+    local header, newY = UIHelper.CreateSectionHeader(panel, "General Settings", 16, yPos)
+    yPos = newY - 5
 
     local onLoginText = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
     onLoginText:SetPoint("TOPLEFT", 36, yPos)

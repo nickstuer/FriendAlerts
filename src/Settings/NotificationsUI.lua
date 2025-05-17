@@ -51,7 +51,7 @@ function NotificationsUI:InitializeOptions()
 
 	local subtitle = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 	subtitle:SetPoint("TOPLEFT", 16, yPos)
-	subtitle:SetText("Allows you to configure notifications for friends/guildies entering new games or zones.")
+	subtitle:SetText("Allows you to customize notifications for Battle.net Friends/Favorites, Character Friends, and Guild Members.")
 	yPos = yPos - 25
 
 	-- Add separator
@@ -82,7 +82,7 @@ function NotificationsUI:InitializeOptions()
     bnetFavoriteChangesGameText:SetText(settingsName[k] or k)
 
     for k, v in pairs(FriendAlertsDB.settings.notifications.bnetFavorite) do
-        local option = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local option = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         option:SetPoint("TOPLEFT", 16, yPos)
         option:SetText(FriendAlertsDB.settings.notifications.bnetFavorite[k]["Text"])
 
@@ -164,7 +164,7 @@ function NotificationsUI:InitializeOptions()
     bnetFriendChangesGameText:SetText(settingsName[k] or k)
 
     for k, v in pairs(FriendAlertsDB.settings.notifications.bnetFriend) do
-        local option = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local option = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         option:SetPoint("TOPLEFT", 16, yPos)
         option:SetText(FriendAlertsDB.settings.notifications.bnetFriend[k]["Text"])
 
@@ -247,7 +247,7 @@ function NotificationsUI:InitializeOptions()
     friendChangesGameText:SetText(settingsName[k] or k)
 
     for k, v in pairs(FriendAlertsDB.settings.notifications.friend) do
-        local option = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local option = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         option:SetPoint("TOPLEFT", 16, yPos)
         option:SetText(FriendAlertsDB.settings.notifications.friend[k]["Text"])
 
@@ -329,7 +329,7 @@ function NotificationsUI:InitializeOptions()
     guildMemberChangesGameText:SetText(settingsName[k] or k)
 
     for k, v in pairs(FriendAlertsDB.settings.notifications.guildMember) do
-        local option = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local option = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         option:SetPoint("TOPLEFT", 16, yPos)
         option:SetText(FriendAlertsDB.settings.notifications.guildMember[k]["Text"])
 
