@@ -1,6 +1,6 @@
 ## Interface: 110105
 ## Title: FriendAlerts
-## Version: 2.1.4
+## Version: 2.2.0
 ## Author: Nick Stuer
 ## IconTexture: Interface\AddOns\FriendAlerts\Media\Icon.tga
 
