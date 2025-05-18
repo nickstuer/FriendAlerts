@@ -42,7 +42,7 @@ FR.defaults = {
 				Enabled = true,
 				Sound = true,
 				Text = "Goes AFK",
-				SoundFile = "that-was-quick",
+				SoundFile = "pretty-good",
 				SortOrder = 2,
 			},
 			NoLongerAFK = {
@@ -86,7 +86,7 @@ FR.defaults = {
 				Enabled = true,
 				Sound = false,
 				Text = "Goes AFK",
-				SoundFile = "that-was-quick",
+				SoundFile = "pretty-good",
 				SortOrder = 2,
 			},
 			NoLongerAFK = {
