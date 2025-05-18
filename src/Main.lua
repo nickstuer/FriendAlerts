@@ -22,24 +22,42 @@ FR.defaults = {
 				Sound = true,
 				Text = "Changes Game",
 				SoundFile = "that-was-quick",
+				SortOrder = 1,
 			},
 			ChangesCharacter = {
 				Enabled = true,
 				Sound = true,
 				Text = "Changes WoW Character",
 				SoundFile = "that-was-quick",
+				SortOrder = 4,
 			},
 			ChangesZone = {
 				Enabled = true,
 				Sound = false,
 				Text = "Changes WoW Zone",
 				SoundFile = "emergence",
+				SortOrder = 5,
+			},
+			GoesAFK = {
+				Enabled = true,
+				Sound = true,
+				Text = "Goes AFK",
+				SoundFile = "that-was-quick",
+				SortOrder = 2,
+			},
+			NoLongerAFK = {
+				Enabled = true,
+				Sound = true,
+				Text = "No Longer AFK",
+				SoundFile = "that-was-quick",
+				SortOrder = 3,
 			},
 			LevelsCharacter = {
 				Enabled = true,
 				Sound = true,
 				Text = "Levels WoW Character",
 				SoundFile = "so-proud",
+				SortOrder = 6,
 			},
 		},
 		bnetFriend = {
@@ -48,24 +66,42 @@ FR.defaults = {
 				Sound = false,
 				Text = "Changes Game",
 				SoundFile = "that-was-quick",
+				SortOrder = 1,
 			},
 			ChangesCharacter = {
 				Enabled = true,
 				Sound = false,
 				Text = "Changes WoW Character",
 				SoundFile = "that-was-quick",
+				SortOrder = 4,
 			},
 			ChangesZone = {
 				Enabled = true,
 				Sound = false,
 				Text = "Changes WoW Zone",
 				SoundFile = "emergence",
+				SortOrder = 5,
+			},
+			GoesAFK = {
+				Enabled = true,
+				Sound = false,
+				Text = "Goes AFK",
+				SoundFile = "that-was-quick",
+				SortOrder = 2,
+			},
+			NoLongerAFK = {
+				Enabled = true,
+				Sound = false,
+				Text = "No Longer AFK",
+				SoundFile = "that-was-quick",
+				SortOrder = 3,
 			},
 			LevelsCharacter = {
 				Enabled = true,
 				Sound = true,
 				Text = "Levels WoW Character",
 				SoundFile = "so-proud",
+				SortOrder = 6,
 			},
 		},
 		friend = {
@@ -74,12 +110,14 @@ FR.defaults = {
 				Sound = false,
 				Text = "Changes WoW Zone",
 				SoundFile = "emergence",
+				SortOrder = 1,
 			},
 			LevelsCharacter = {
 				Enabled = true,
 				Sound = true,
 				Text = "Levels WoW Character",
 				SoundFile = "so-proud",
+				SortOrder = 2,
 			},
 		},
 		guildMember = {
@@ -88,12 +126,14 @@ FR.defaults = {
 				Sound = false,
 				Text = "Changes WoW Zone",
 				SoundFile = "emergence",
+				SortOrder = 1,
 			},
 			LevelsCharacter = {
 				Enabled = true,
 				Sound = true,
 				Text = "Levels WoW Character",
 				SoundFile = "so-proud",
+				SortOrder = 2,
 			},
 		},
 	},
@@ -104,7 +144,7 @@ FR.defaults = {
 	},
 
 	config = {
-		databaseVersion = 3,
+		databaseVersion = 4,
 	}
 }
 
@@ -191,6 +231,8 @@ FR.Scan = function ()
 				local accountName = friendAccountInfo.accountName;
 				local isOnline = friendAccountInfo.gameAccountInfo.isOnline or false;
 				local isFavorite = friendAccountInfo.isFavorite or false;
+				local isDND = friendAccountInfo.isDND or false;
+				local note = friendAccountInfo.note or "";
 
 				local game = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.clientProgram) or nil;
 				local areaName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.areaName) or "Unknown";
@@ -199,6 +241,7 @@ FR.Scan = function ()
 				local realmName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.realmName) or nil;
 				local factionName = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.factionName) or "Unknown";
 				local gameAccountID = friendAccountInfo.gameAccountInfo.wowProjectID or nil; -- WoW Project ID aka version
+				local isAFK = (friendAccountInfo.gameAccountInfo and friendAccountInfo.gameAccountInfo.isGameAFK) or false;
 				local playerGuid = friendAccountInfo.gameAccountInfo.playerGuid;
 				local slug = characterName;
 				if realmName then
@@ -206,10 +249,17 @@ FR.Scan = function ()
 				end
 				
 				repeat
+					-- Ensure the bnetIDAccount is valid or skip
 					if not FR.bnetFriends[bnetIDAccount] then break end
 
+					-- Ensure the game/client is not nil
 					if not game then break end
+
+					-- Check if friend is online and skip if not
 					if (isOnline == false) then break end
+
+					-- Check if 'frignore' is in the note and skip if it is
+					if string.find(note, "frignore") then break end
 
 					-- Changes Game
 					if game ~= FR.bnetFriends[bnetIDAccount]["game"] and FR.bnetFriends[bnetIDAccount]["isOnline"] and game ~= "WoW" then
@@ -226,6 +276,32 @@ FR.Scan = function ()
 
 						if not FR.icons[game] then
 							Utils.Debug("Unknown Game: " .. game);
+						end
+						break
+					end
+
+					-- Changes AFK Status
+					if isAFK ~= FR.bnetFriends[bnetIDAccount]["isAFK"] then
+						if isAFK then
+							if isFavorite and FriendAlertsDB.settings.notifications.bnetFriend.GoesAFK.Enabled then
+								FR.Alert(FR.icons["Friend"] .. string.format("%s is now AFK.", FR.WhisperLink(accountName, bnetIDAccount)));
+								if FriendAlertsDB.settings.notifications.bnetFavorite.GoesAFK.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.bnetFavorite.GoesAFK.SoundFile], "Effects") end
+							end
+
+							if not isFavorite and FriendAlertsDB.settings.notifications.bnetFriend.GoesAFK.Enabled then
+								FR.Alert(FR.icons["Friend"] .. string.format("%s is now AFK.", FR.WhisperLink(accountName, bnetIDAccount)));
+								if FriendAlertsDB.settings.notifications.bnetFriend.GoesAFK.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.bnetFriend.GoesAFK.SoundFile], "Effects") end
+							end
+						else
+							if isFavorite and FriendAlertsDB.settings.notifications.bnetFavorite.NoLongerAFK.Enabled then
+								FR.Alert(FR.icons["Friend"] .. string.format("%s is no longer AFK.", FR.WhisperLink(accountName, bnetIDAccount)));
+								if FriendAlertsDB.settings.notifications.bnetFavorite.NoLongerAFK.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.bnetFavorite.NoLongerAFK.SoundFile], "Effects") end
+							end
+
+							if not isFavorite and FriendAlertsDB.settings.notifications.bnetFriend.NoLongerAFK.Enabled then
+								FR.Alert(FR.icons["Friend"] .. string.format("%s is no longer AFK.", FR.WhisperLink(accountName, bnetIDAccount)));
+								if FriendAlertsDB.settings.notifications.bnetFriend.NoLongerAFK.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.bnetFriend.NoLongerAFK.SoundFile], "Effects") end
+							end
 						end
 						break
 					end
@@ -282,6 +358,7 @@ FR.Scan = function ()
 				FR.bnetFriends[bnetIDAccount] = FR.bnetFriends[bnetIDAccount] or {};
 				FR.bnetFriends[bnetIDAccount]["game"] = game;
 				FR.bnetFriends[bnetIDAccount]["isOnline"] = isOnline;
+				FR.bnetFriends[bnetIDAccount]["isAFK"] = isAFK;
 				FR.bnetFriends[bnetIDAccount]["areaName"] = areaName;
 				FR.bnetFriends[bnetIDAccount]["characterSlug"] = slug;
 				FR.bnetFriends[bnetIDAccount]["characterLevel"] = characterLevel;
@@ -406,6 +483,16 @@ initFrame:SetScript("OnEvent", function(self, event, arg1)
 		if FriendAlertsDB.settings.config.databaseVersion < 3 then
 			FriendAlertsDB.settings.options.onLoginMessage = FriendAlertsDB.settings.options.onLoginMessage or FR.defaults.options.onLoginMessage
 			FriendAlertsDB.settings.config.databaseVersion = 3
+		end
+
+		-- Upgrade from database version 3 to 4
+		-- added option to enable/disable the 'Addon Loaded' message at login
+		if FriendAlertsDB.settings.config.databaseVersion < 4 then
+			FriendAlertsDB.settings.notifications.bnetFavorite["GoesAFK"] = FR.defaults.notifications.bnetFavorite.GoesAFK
+			FriendAlertsDB.settings.notifications.bnetFavorite["NoLongerAFK"] = FR.defaults.notifications.bnetFavorite.NoLongerAFK
+			FriendAlertsDB.settings.notifications.bnetFriend["GoesAFK"] = FR.defaults.notifications.bnetFriend.GoesAFK
+			FriendAlertsDB.settings.notifications.bnetFriend["NoLongerAFK"] = FR.defaults.notifications.bnetFriend.NoLongerAFK
+			FriendAlertsDB.settings.config.databaseVersion = 4
 		end
 
 		-- useful during development when adding new settings to database, be cautious though when adding new settings to an existing dictionary.

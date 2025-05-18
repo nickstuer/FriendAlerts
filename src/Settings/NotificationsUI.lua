@@ -81,7 +81,16 @@ function NotificationsUI:InitializeOptions()
     bnetFavoriteChangesGameText:SetPoint("TOPLEFT", 16, yPos)
     bnetFavoriteChangesGameText:SetText(settingsName[k] or k)
 
-    for k, v in pairs(FriendAlertsDB.settings.notifications.bnetFavorite) do
+    -- Sort Dictionary by SortOrder First --
+    local keys = {}
+    for k in pairs(FR.defaults.notifications.bnetFavorite) do
+        table.insert(keys, k)
+    end
+    table.sort(keys, function(a, b)
+        return FR.defaults.notifications.bnetFavorite[a].SortOrder < FR.defaults.notifications.bnetFavorite[b].SortOrder
+    end)
+
+    for _, k in ipairs(keys) do
         local option = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         option:SetPoint("TOPLEFT", 16, yPos)
         option:SetText(FriendAlertsDB.settings.notifications.bnetFavorite[k]["Text"])
@@ -163,7 +172,16 @@ function NotificationsUI:InitializeOptions()
     bnetFriendChangesGameText:SetPoint("TOPLEFT", 16, yPos)
     bnetFriendChangesGameText:SetText(settingsName[k] or k)
 
-    for k, v in pairs(FriendAlertsDB.settings.notifications.bnetFriend) do
+    -- Sort Dictionary by SortOrder First --
+    local keys = {}
+    for k in pairs(FR.defaults.notifications.bnetFriend) do
+        table.insert(keys, k)
+    end
+    table.sort(keys, function(a, b)
+        return FR.defaults.notifications.bnetFriend[a].SortOrder < FR.defaults.notifications.bnetFriend[b].SortOrder
+    end)
+
+    for _, k in ipairs(keys) do
         local option = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         option:SetPoint("TOPLEFT", 16, yPos)
         option:SetText(FriendAlertsDB.settings.notifications.bnetFriend[k]["Text"])
@@ -246,7 +264,16 @@ function NotificationsUI:InitializeOptions()
     friendChangesGameText:SetPoint("TOPLEFT", 16, yPos)
     friendChangesGameText:SetText(settingsName[k] or k)
 
-    for k, v in pairs(FriendAlertsDB.settings.notifications.friend) do
+    -- Sort Dictionary by SortOrder First --
+    local keys = {}
+    for k in pairs(FR.defaults.notifications.friend) do
+        table.insert(keys, k)
+    end
+    table.sort(keys, function(a, b)
+        return FR.defaults.notifications.friend[a].SortOrder < FR.defaults.notifications.friend[b].SortOrder
+    end)
+
+    for _, k in ipairs(keys) do
         local option = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         option:SetPoint("TOPLEFT", 16, yPos)
         option:SetText(FriendAlertsDB.settings.notifications.friend[k]["Text"])
@@ -328,7 +355,16 @@ function NotificationsUI:InitializeOptions()
     guildMemberChangesGameText:SetPoint("TOPLEFT", 16, yPos)
     guildMemberChangesGameText:SetText(settingsName[k] or k)
 
-    for k, v in pairs(FriendAlertsDB.settings.notifications.guildMember) do
+    -- Sort Dictionary by SortOrder First --
+    local keys = {}
+    for k in pairs(FR.defaults.notifications.guildMember) do
+        table.insert(keys, k)
+    end
+    table.sort(keys, function(a, b)
+        return FR.defaults.notifications.guildMember[a].SortOrder < FR.defaults.notifications.guildMember[b].SortOrder
+    end)
+
+    for _, k in ipairs(keys) do
         local option = scrollChild:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         option:SetPoint("TOPLEFT", 16, yPos)
         option:SetText(FriendAlertsDB.settings.notifications.guildMember[k]["Text"])

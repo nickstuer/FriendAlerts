@@ -76,10 +76,26 @@ function OptionsUI:InitializeOptions()
     )
 
     yPos = yPos - 35
+
+
     -- Add separator
+	local _, newY = UIHelper.CreateSeparator(panel, 16, yPos)
+	yPos = newY - 10
+
+
+    -- SECTION: Ignore Friends
+    local header, newY = UIHelper.CreateSectionHeader(panel, "Avoid Certain Friend Alerts", 16, yPos)
+    yPos = newY - 5
+
+    local subtitle = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+	subtitle:SetPoint("TOPLEFT", 16, yPos)
+	subtitle:SetText("Have a friend that you don't want to be notified about? Put 'frignore' in their note and you will not be notified.")
+    
+    yPos = yPos - 35
 	local _, newY = UIHelper.CreateSeparator(panel, 16, yPos)
 	yPos = newY - 50
 
+    -- SECTION: Reset Settings
     local button = CreateFrame("Button", "MyAddonButton", panel, "GameMenuButtonTemplate")
     button:SetPoint("TOPLEFT", 150, yPos)
     button:SetSize(200, 30)
