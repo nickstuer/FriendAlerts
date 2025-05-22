@@ -13,6 +13,9 @@ FR.bNetCharacterSlugs = {}; -- To temporarily store character slugs for battle.n
 
 local playerFullName = Utils.GetFullPlayerName()
 
+local lastMooTime = 0
+local cooldown = 30
+
 -- Default settings
 FR.defaults = {
 	notifications = {
@@ -141,10 +144,11 @@ FR.defaults = {
 	options = {
 		scanInterval = 3, -- in seconds
 		onLoginMessage = true,
+		easterEggs = true
 	},
 
 	config = {
-		databaseVersion = 4,
+		databaseVersion = 5,
 	}
 }
 
@@ -495,6 +499,13 @@ initFrame:SetScript("OnEvent", function(self, event, arg1)
 			FriendAlertsDB.settings.config.databaseVersion = 4
 		end
 
+		-- Upgrade from database version 4 to 5
+		-- added option to enable/disable easter eggs
+		if FriendAlertsDB.settings.config.databaseVersion < 5 then
+			FriendAlertsDB.settings.options["easterEggs"] = FR.defaults.options.easterEggs
+			FriendAlertsDB.settings.config.databaseVersion = 5
+		end
+
 		-- useful during development when adding new settings to database, be cautious though when adding new settings to an existing dictionary.
 		-- perhaps expand this to check for specific keys that are missing
 		for k, v in pairs(FR.defaults) do
@@ -551,6 +562,23 @@ loadingFrame:SetScript("OnEvent", function(self, event)
 
 		--PlaySoundFile("Interface/Addons/FriendAlerts/Media/Sounds/emergence.ogg", "Effects")
         self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+    end
+end)
+
+-- Whisper frame
+local whisperFrame = CreateFrame("Frame")
+whisperFrame:RegisterEvent("CHAT_MSG_WHISPER")
+whisperFrame:RegisterEvent("CHAT_MSG_BN_WHISPER")
+
+whisperFrame:SetScript("OnEvent", function(self, event, msg, sender, _, _, _, _, _, _, _, _, _, presenceID)
+    if msg:lower() == "moo" then
+
+		local currentTime = time()
+		if currentTime - lastMooTime >= cooldown and FriendAlertsDB.settings.options.easterEggs then
+			PlaySoundFile("Interface/Addons/FriendAlerts/Media/Sounds/moo_custom_2.ogg", "Effects")
+			lastMooTime = currentTime
+		end
+
     end
 end)
 

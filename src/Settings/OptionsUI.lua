@@ -74,6 +74,22 @@ function OptionsUI:InitializeOptions()
             FriendAlertsDB.settings.options.onLoginMessage = self:GetChecked()
         end
     )
+    yPos = yPos - 25
+    local onLoginText = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    onLoginText:SetPoint("TOPLEFT", 36, yPos)
+    onLoginText:SetText("Enable Easter Eggs")
+     -- Text Notification Checkbox
+    local _, _ = UIHelper.CreateCheckbox(
+        panel,
+        "CheckboxEasterEggs",
+        "",
+        250,
+        yPos + 7,
+        FriendAlertsDB.settings.options.easterEggs,
+        function(self)
+            FriendAlertsDB.settings.options.easterEggs = self:GetChecked()
+        end
+    )
 
     yPos = yPos - 35
 
