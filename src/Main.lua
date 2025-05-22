@@ -283,7 +283,7 @@ FR.Scan = function ()
 					-- Changes AFK Status
 					if isAFK ~= FR.bnetFriends[bnetIDAccount]["isAFK"] then
 						if isAFK then
-							if isFavorite and FriendAlertsDB.settings.notifications.bnetFriend.GoesAFK.Enabled then
+							if isFavorite and FriendAlertsDB.settings.notifications.bnetFavorite.GoesAFK.Enabled then
 								FR.Alert(FR.icons["Friend"] .. string.format("%s is now AFK.", FR.WhisperLink(accountName, bnetIDAccount)));
 								if FriendAlertsDB.settings.notifications.bnetFavorite.GoesAFK.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.bnetFavorite.GoesAFK.SoundFile], "Effects") end
 							end
