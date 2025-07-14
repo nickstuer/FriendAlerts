@@ -116,7 +116,7 @@ function AboutUI:InitializeOptions()
 
     local subtitle = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 	subtitle:SetPoint("TOPLEFT", 16, yPos)
-	subtitle:SetText("Sound alerts provided by NotificationSounds.com under Creative Commons licenses.")
+	subtitle:SetText("Some sound alerts provided by NotificationSounds.com under Creative Commons licenses.")
 	yPos = yPos - 25
 
 

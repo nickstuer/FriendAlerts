@@ -262,8 +262,11 @@ FR.Scan = function ()
 					-- Check if friend is online and skip if not
 					if (isOnline == false) then break end
 
-					-- Check if 'frignore' is in the note and skip if it is
+					-- Check if 'frignore' is in the note and skip if it is. (keeping this for backwards compatibility)
 					if string.find(note, "frignore") then break end
+
+					-- Check if 'fa_ignore' is in the note and skip if it is
+					if string.find(note, "fa_ignore") then break end
 
 					-- Changes Game
 					if game ~= FR.bnetFriends[bnetIDAccount]["game"] and FR.bnetFriends[bnetIDAccount]["isOnline"] and game ~= "WoW" then
@@ -543,7 +546,7 @@ initFrame:SetScript("OnEvent", function(self, event, arg1)
 	end
 
 	if event == "PLAYER_LOGIN" then
-		C_Timer.After(5, FR.Scan); -- Start scanning after a short delay
+		C_Timer.After(8, FR.Scan); -- Start scanning after a short delay
 		self:UnregisterEvent("PLAYER_LOGIN")
 	end
 end)

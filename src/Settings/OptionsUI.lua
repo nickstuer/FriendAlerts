@@ -105,7 +105,7 @@ function OptionsUI:InitializeOptions()
 
     local subtitle = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 	subtitle:SetPoint("TOPLEFT", 16, yPos)
-	subtitle:SetText("Have a friend that you don't want to be notified about? Put 'frignore' in their note and you will not be notified.")
+	subtitle:SetText("Have a friend that you don't want to be notified about? Put 'fa_ignore' in their note and you will not be notified.")
     
     yPos = yPos - 35
 	local _, newY = UIHelper.CreateSeparator(panel, 16, yPos)
