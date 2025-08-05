@@ -1,12 +1,12 @@
-## Interface: 110107
+## Interface: 110200
 ## Title: FriendAlerts
-## Version: 2.2.3
+## Version: 2.2.4
 ## Author: Nick Stuer
 ## IconTexture: Interface\AddOns\FriendAlerts\Media\Icon.tga
 
 ## SavedVariables: FriendAlertsDB
 
-## Category-enUS: Social
+## Category-enUS: Plunger
 
 Core\Config.lua
 Core\Utils.lua
