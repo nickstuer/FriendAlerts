@@ -185,7 +185,7 @@ FR.icons = {
 	["Pro"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-Overwatch:16|t",
 	["D3"] = "|Tinterface/chatframe/ui-chaticon-d3.blp:16|t",
 	["Fen"] = "|Tinterface/chatframe/ui-chaticon-diabloimmortal.blp:16|t",
-	["Neutral"] = "|Tinterface/icons/inv_misc_questionmark.blp:16|t"
+	["Neutral"] = "|Tinterface/characterframe/temporaryportrait-male-pandaren.blp:16|t"
 };
 
 FR.games = {
@@ -454,7 +454,7 @@ end
 
 local initFrame = CreateFrame("Frame")
 initFrame:RegisterEvent("ADDON_LOADED")
-initFrame:RegisterEvent("PLAYER_LOGIN")
+initFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 initFrame:SetScript("OnEvent", function(self, event, arg1)
     if event == "ADDON_LOADED" and arg1 == addonName then
@@ -542,30 +542,20 @@ initFrame:SetScript("OnEvent", function(self, event, arg1)
             end)
         end)
 
-		self:UnregisterEvent("ADDON_LOADED")
+		initFrame:UnregisterEvent("ADDON_LOADED")
 	end
 
-	if event == "PLAYER_LOGIN" then
-		C_Timer.After(8, FR.Scan); -- Start scanning after a short delay
-		self:UnregisterEvent("PLAYER_LOGIN")
-	end
-end)
-
-
--- Loading message when player enters the world
-local loadingFrame = CreateFrame("Frame")
-loadingFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-loadingFrame:SetScript("OnEvent", function(self, event)
-    if event == "PLAYER_ENTERING_WORLD" then
-        if FriendAlertsDB.settings.options.onLoginMessage then
+	if event == "PLAYER_ENTERING_WORLD" then
+		if FriendAlertsDB.settings.options.onLoginMessage then
 			Utils.Print("Addon Loaded. Version: " .. FR.version)
 		end
 		
 		Utils.Debug("Debug Mode is Enabled");
 
-		--PlaySoundFile("Interface/Addons/FriendAlerts/Media/Sounds/emergence.ogg", "Effects")
-        self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-    end
+		C_Timer.After(4, FR.Scan); -- Start scanning after a short delay
+		initFrame:UnregisterEvent("PLAYER_LOGIN")
+		initFrame:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	end
 end)
 
 -- Whisper frame
