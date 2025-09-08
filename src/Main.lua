@@ -394,24 +394,29 @@ FR.Scan = function ()
 			local characterLevel = friendInfo.level or nil;
 			--local slug = characterName;
 			local guid = friendInfo.guid;
+			local note = friendInfo.notes or "";
 
-			if isOnline and characterName then
-				if FR.characterFriends[characterName] then
-					-- Changes Zone in WoW
-					if FR.characterFriends[characterName]["area"] ~= areaName and FriendAlertsDB.settings.notifications.friend.ChangesZone.Enabled and not FR.bNetCharacterSlugs[guid] then
-						FR.Alert(string.format("|cffffff00%s has entered %s.", characterName, areaName));
-						if FriendAlertsDB.settings.notifications.friend.ChangesZone.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.friend.ChangesZone.SoundFile], "Effects") end
-					end
+			-- Check if 'fa_ignore' is in the note and skip if it is
+			if not string.find(note, "fa_ignore") then
 
-					-- Levels Character in WoW
-					if characterLevel ~= FR.characterFriends[characterName]["level"] and FriendAlertsDB.settings.notifications.friend.LevelsCharacter.Enabled and not FR.bNetCharacterSlugs[guid] and characterLevel > 1  then
-						FR.Alert(string.format("|cffffff00%s has reached %d!", characterName, characterLevel));
-						if FriendAlertsDB.settings.notifications.friend.LevelsCharacter.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.friend.LevelsCharacter.SoundFile], "Effects") end
+				if isOnline and characterName then
+					if FR.characterFriends[characterName] then
+						-- Changes Zone in WoW
+						if FR.characterFriends[characterName]["area"] ~= areaName and FriendAlertsDB.settings.notifications.friend.ChangesZone.Enabled and not FR.bNetCharacterSlugs[guid] then
+							FR.Alert(string.format("|cffffff00%s has entered %s.", characterName, areaName));
+							if FriendAlertsDB.settings.notifications.friend.ChangesZone.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.friend.ChangesZone.SoundFile], "Effects") end
+						end
+
+						-- Levels Character in WoW
+						if characterLevel ~= FR.characterFriends[characterName]["level"] and FriendAlertsDB.settings.notifications.friend.LevelsCharacter.Enabled and not FR.bNetCharacterSlugs[guid] and characterLevel > 1  then
+							FR.Alert(string.format("|cffffff00%s has reached %d!", characterName, characterLevel));
+							if FriendAlertsDB.settings.notifications.friend.LevelsCharacter.Sound then PlaySoundFile(FR.sounds[FriendAlertsDB.settings.notifications.friend.LevelsCharacter.SoundFile], "Effects") end
+						end
 					end
+					FR.characterFriends[characterName] = friendInfo or {};
+					FR.characterFriends[characterName]["area"] = areaName;
+					FR.characterFriends[characterName]["level"] = characterLevel;
 				end
-				FR.characterFriends[characterName] = friendInfo or {};
-				FR.characterFriends[characterName]["area"] = areaName;
-				FR.characterFriends[characterName]["level"] = characterLevel;
 			end
 		end
 	end
