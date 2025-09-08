@@ -552,7 +552,7 @@ initFrame:SetScript("OnEvent", function(self, event, arg1)
 		
 		Utils.Debug("Debug Mode is Enabled");
 
-		C_Timer.After(4, FR.Scan); -- Start scanning after a short delay
+		C_Timer.After(8, FR.Scan); -- Start scanning after a short delay
 		initFrame:UnregisterEvent("PLAYER_LOGIN")
 		initFrame:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	end
