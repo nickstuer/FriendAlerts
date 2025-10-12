@@ -14,6 +14,4 @@ Core\UIHelper.lua
 Settings\AboutUI.lua
 Settings\NotificationsUI.lua
 Settings\OptionsUI.lua
-Settings\SupportUI.lua
-
 Main.lua

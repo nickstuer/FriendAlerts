@@ -537,12 +537,6 @@ initFrame:SetScript("OnEvent", function(self, event, arg1)
 					if FR.OptionsUI and FR.OptionsUI.Initialize then
 						FR.OptionsUI:Initialize()
 					end
-
-					C_Timer.After(0.1, function()
-						if FR.SupportUI and FR.SupportUI.Initialize then
-							FR.SupportUI:Initialize()
-						end
-					end)
 				end)
             end)
         end)
