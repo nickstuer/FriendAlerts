@@ -48,8 +48,9 @@ Quickly configure the alerts to avoid chat spam. Select between Battle.net Favor
 | Overwatch                             | Supported                           |
 
 ## 🛠 Install
+[CurseForge](https://www.curseforge.com/wow/addons/friendalerts)
 ```
-1. Download from [CurseForge](https://www.curseforge.com/wow/addons/friendalerts) or use the CurseForge/WoWUp-CF app
+1. Download from CurseForge or use the CurseForge/WoWUp-CF app
 2. Extract to your 'World of Warcraft/Interface/AddOns' folder
 3. Ensure the addon is enabled on the character selection screen
 ```
