@@ -1,8 +1,5 @@
 package-as: FriendAlerts
 
-move-folders:
-  src: FriendAlerts
-
 ignore:
   - .git
   - .github
