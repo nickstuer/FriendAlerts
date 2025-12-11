@@ -1,0 +1,51 @@
+name: Discord Push
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to use"
+        required: true
+permissions:
+  contents: read
+
+jobs:
+    discord-push:
+        #needs: release
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                fetch-depth: 0
+
+            - name: Send plain message to Discord
+              env:
+                DISCORD_WEBHOOK: ${{ secrets.RELEASE_WEBHOOK_URL }}
+                TAG_NAME: ${{ github.event.inputs.tag || github.ref_name }}
+                PROJECT_NAME: ${{ github.event.repository.name }}
+                URL: ${{ github.event.repository.html_url }}/releases/tag/${{ github.event.inputs.tag || github.ref_name }}
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                
+              run: |
+                CHANGELOG=$(gh release view "${{ github.event.inputs.tag || github.ref_name }}" --json body -q .body)
+                echo "::debug::CHANGELOG=$CHANGELOG"
+
+                # Escape newlines in CHANGELOG so JSON stays valid
+                ESCAPED_CHANGELOG=$(jq -n \
+                    --arg content "🆕 New Addon Release! **Version: $TAG_NAME**" \
+                    --arg changelog "$CHANGELOG" \
+                    '{
+                        content: $content,
+                        embeds: [
+                        {
+                            title: "Changelog",
+                            description: $changelog
+                        }
+                        ]
+                    }'
+                )
+                echo "::debug::ESCAPED_CHANGELOG=$ESCAPED_CHANGELOG"
+
+
+                curl -X POST -H "Content-Type: application/json" -d "$ESCAPED_CHANGELOG" "$DISCORD_WEBHOOK"
