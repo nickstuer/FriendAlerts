@@ -268,6 +268,9 @@ FR.Scan = function ()
 					-- Check if 'fa_ignore' is in the note and skip if it is
 					if string.find(note, "fa_ignore") then break end
 
+					-- Ensure playerGuid is valid (sometimes it's nil and not sure why) Issue #15
+					if not playerGuid then break end
+
 					-- Changes Game
 					if game ~= FR.bnetFriends[bnetIDAccount]["game"] and FR.bnetFriends[bnetIDAccount]["isOnline"] and game ~= "WoW" then
 						if isFavorite and FriendAlertsDB.settings.notifications.bnetFavorite.ChangesGame.Enabled then
