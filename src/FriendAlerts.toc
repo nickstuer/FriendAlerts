@@ -1,8 +1,9 @@
 ## Interface: 110207
 ## Title: FriendAlerts
-## Version: 2.2.9
+## Version: @project-version@
 ## Author: Nick Stuer
 ## IconTexture: Interface\AddOns\FriendAlerts\Media\Icon.tga
+## X-Curse-Project-ID: 1248750
 
 ## SavedVariables: FriendAlertsDB
 

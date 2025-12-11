@@ -1,0 +1,14 @@
+package-as: FriendAlerts
+
+move-folders:
+  src: FriendAlerts
+
+ignore:
+  - .git
+  - .github
+  - .gitignore
+  - .vscode
+  - dist
+  - build.sh
+  - deploy.sh
+  - .DS_Store
