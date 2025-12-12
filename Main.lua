@@ -174,18 +174,18 @@ FR.sounds = {
 	};
 
 FR.icons = {
-	["App"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-Battlenet:14:14:0:0:30:30|t",
-	["BSAp"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-armorychat-awaymobile:14:14:0:0:30:30|t",
-	["WoW"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-WoW:14:14:0:0:30:30|t",
-	["Horde"] = "|TInterface\\Common\\icon-horde:20|t",
-	["Alliance"] = "|TInterface\\Common\\icon-alliance:20:20:0:0:30:30:5:25:0:30|t",
-	["Friend"] = "|TInterface\\FriendsFrame\\UI-Toast-FriendOnlineIcon:17:17:0:0:30:30:2:30:2:30|t",
-	["WTCG"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-WTCG:16|t",
-	["Hero"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-HotS:16|t",
-	["Pro"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-Overwatch:16|t",
-	["D3"] = "|Tinterface/chatframe/ui-chaticon-d3.blp:16|t",
-	["Fen"] = "|Tinterface/chatframe/ui-chaticon-diabloimmortal.blp:16|t",
-	["Neutral"] = "|Tinterface/characterframe/temporaryportrait-male-pandaren.blp:16|t"
+	["App"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-Battlenet:14:14:0:{yOffset}:30:30|t",
+	["BSAp"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-armorychat-awaymobile:14:14:0:{yOffset}:30:30|t",
+	["WoW"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-WoW:14:14:0:{yOffset}:30:30|t",
+	["Horde"] = "|Tinterface\\worldstateframe\\hordeicon.blp:16:16:0:{yOffset}:16:16|t",
+	["Alliance"] = "|Tinterface\\worldstateframe\\allianceicon.blp:16:16:0:{yOffset}:16:16|t",
+	["Friend"] = "|TInterface\\FriendsFrame\\UI-Toast-FriendOnlineIcon:16:14:0:{yOffset}:16:16|t",
+	["WTCG"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-WTCG:16:16:0:{yOffset}:16:16|t",
+	["Hero"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-HotS:16:16:0:{yOffset}:16:16|t",
+	["Pro"] = "|TInterface\\CHATFRAME\\UI-ChatIcon-Overwatch:16:16:0:{yOffset}:16:16|t",
+	["D3"] = "|Tinterface/chatframe/ui-chaticon-d3.blp:16:16:0:{yOffset}:16:16|t",
+	["Fen"] = "|Tinterface/chatframe/ui-chaticon-diabloimmortal.blp:16:16:0:{yOffset}:16:16|t",
+	["Neutral"] = "|Tinterface/characterframe/temporaryportrait-male-pandaren.blp:16:16:0:{yOffset}:16:16|t"
 };
 
 FR.games = {
@@ -215,6 +215,7 @@ end
 
 FR.Alert = function(text)
 	local ChatFrame = DEFAULT_CHAT_FRAME;
+	text = text:gsub("{yOffset}", "-2")
 	ChatFrame:AddMessage(text, BATTLENET_FONT_COLOR["r"], BATTLENET_FONT_COLOR["g"], BATTLENET_FONT_COLOR["b"]);
 end
 
@@ -587,6 +588,13 @@ SlashCmdList["FRIENDALERTS"] = function(msg)
 			settings = CopyTable(FR.defaults),
 		}
 		Utils.Print("Settings have been reset to defaults. Please reload the UI to apply changes!")
+		return
+	end
+
+	if msg == "test" then
+		for iconName, iconCode in pairs(FR.icons) do
+			FR.Alert("IconTest: " .. iconCode .. " " .. iconName .. " icon test")
+		end
 		return
 	end
     Settings.OpenToCategory("FriendAlerts")
