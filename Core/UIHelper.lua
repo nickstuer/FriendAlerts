@@ -73,8 +73,8 @@ function UIHelper.CreateSlider(parent, name, label, min, max, step, defaultVal, 
         local highText = _G[sliderName .. "High"]
         local valueText = _G[sliderName .. "Text"]
 
-        if lowText then lowText:SetText("") end
-        if highText then highText:SetText("") end
+        if lowText then lowText:SetText(min) end
+        if highText then highText:SetText(max) end
         if valueText then valueText:SetText("") end
     end
 
