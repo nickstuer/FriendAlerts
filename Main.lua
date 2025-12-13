@@ -144,11 +144,12 @@ FR.defaults = {
 	options = {
 		scanInterval = 3, -- in seconds
 		onLoginMessage = true,
-		easterEggs = true
+		easterEggs = true,
+		iconYOffset = 2,
 	},
 
 	config = {
-		databaseVersion = 5,
+		databaseVersion = 6,
 	}
 }
 
@@ -215,7 +216,7 @@ end
 
 FR.Alert = function(text)
 	local ChatFrame = DEFAULT_CHAT_FRAME;
-	text = text:gsub("{yOffset}", "-2")
+	text = text:gsub("{yOffset}", "-" .. FriendAlertsDB.settings.options.iconYOffset);
 	ChatFrame:AddMessage(text, BATTLENET_FONT_COLOR["r"], BATTLENET_FONT_COLOR["g"], BATTLENET_FONT_COLOR["b"]);
 end
 
@@ -516,6 +517,13 @@ initFrame:SetScript("OnEvent", function(self, event, arg1)
 		if FriendAlertsDB.settings.config.databaseVersion < 5 then
 			FriendAlertsDB.settings.options["easterEggs"] = FR.defaults.options.easterEggs
 			FriendAlertsDB.settings.config.databaseVersion = 5
+		end
+
+		-- Upgrade from database version 5 to 6
+		-- added option for icon Y offset
+		if FriendAlertsDB.settings.config.databaseVersion < 6 then
+			FriendAlertsDB.settings.options["iconYOffset"] = FR.defaults.options.iconYOffset
+			FriendAlertsDB.settings.config.databaseVersion = 6
 		end
 
 		-- useful during development when adding new settings to database, be cautious though when adding new settings to an existing dictionary.

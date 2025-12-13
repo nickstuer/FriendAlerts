@@ -98,6 +98,28 @@ function OptionsUI:InitializeOptions()
 	local _, newY = UIHelper.CreateSeparator(panel, 16, yPos)
 	yPos = newY - 10
 
+    -- SECTION: icon y offset
+    local header, newY = UIHelper.CreateSectionHeader(panel, "Icon Y Offset", 16, yPos)
+    yPos = newY - 5
+
+    -- slider
+    local _, newY = UIHelper.CreateSlider(
+        panel,
+        "FRSChatIconYOffsetSlider",
+        "Icon Y Offset (pixels)",
+        0, 20, 1,
+        FriendAlertsDB.settings.options.iconYOffset,
+        30, yPos, 400,
+        function(value)
+            FriendAlertsDB.settings.options.iconYOffset = value
+        end
+    )
+    yPos = newY - 10
+
+    -- Add separator
+	local _, newY = UIHelper.CreateSeparator(panel, 16, yPos)
+	yPos = newY - 10
+
 
     -- SECTION: Ignore Friends
     local header, newY = UIHelper.CreateSectionHeader(panel, "Avoid Certain Friend Alerts", 16, yPos)
