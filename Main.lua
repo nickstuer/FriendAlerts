@@ -222,6 +222,12 @@ end
 
 FR.Scan = function ()
 
+	-- 12.0.0 Safety Gate
+    -- in combat, friend names/zones are "Secrets." 
+	if InCombatLockdown() then
+        return;
+    end
+
 	--
 	-- battle.net Friends
 	--
@@ -230,6 +236,9 @@ FR.Scan = function ()
 		--print(FriendAlertsDB.settings.notifications.bnetFriendChangesGame)
 		for index = 1, BNGetNumFriends() do
 			exit = true;
+			if InCombatLockdown() then
+				return;
+			end
 			local friendAccountInfo = C_BattleNet.GetFriendAccountInfo(index);
 
 			if friendAccountInfo then
@@ -392,6 +401,11 @@ FR.Scan = function ()
 	if FriendAlertsDB.settings.notifications.friend.ChangesZone.Enabled or FriendAlertsDB.settings.notifications.friend.LevelsCharacter.Enabled then
 		for index = 1, numberOfFriends do
 
+			-- 12.0.0 Safety Gate (Secrets in Combat)
+			if InCombatLockdown() then
+				return;
+			end
+
 			local friendInfo = C_FriendList.GetFriendInfoByIndex(index);
 			local isOnline = friendInfo.connected or nil;
 			local characterName = friendInfo.name or nil;
@@ -434,6 +448,10 @@ FR.Scan = function ()
 		numTotal, numOnline = GetNumGuildMembers();
 
 		for index = 1, numTotal do
+			-- 12.0.0 Safety Gate (Secrets in Combat)
+			if InCombatLockdown() then
+				return;
+			end
 			local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile, isSoREligible, standingID, playerGuid = GetGuildRosterInfo(index);
 
 			if name and online and FR.guildMembers[name] and not FR.bNetCharacterSlugs[playerGuid] and (playerFullName ~= name) then
