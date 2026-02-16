@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sourceFile=$(find . -maxdepth 1 -name "*.toc")
+sourceFile=$(find . -maxdepth 1 -name "*.toc" -not -name "*_*")
 addonName="Unknown"
 addonNameRegexPattern="## Title: ([A-Za-z]+)"
 
