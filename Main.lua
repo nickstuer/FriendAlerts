@@ -225,6 +225,7 @@ FR.Scan = function ()
 	-- 12.0.0 Safety Gate
     -- in combat, friend names/zones are "Secrets." 
 	if InCombatLockdown() then
+		C_Timer.After(FriendAlertsDB.settings.options.scanInterval, FR.Scan);
         return;
     end
 
@@ -237,6 +238,7 @@ FR.Scan = function ()
 		for index = 1, BNGetNumFriends() do
 			exit = true;
 			if InCombatLockdown() then
+				C_Timer.After(FriendAlertsDB.settings.options.scanInterval, FR.Scan);
 				return;
 			end
 			local friendAccountInfo = C_BattleNet.GetFriendAccountInfo(index);
@@ -403,6 +405,7 @@ FR.Scan = function ()
 
 			-- 12.0.0 Safety Gate (Secrets in Combat)
 			if InCombatLockdown() then
+				C_Timer.After(FriendAlertsDB.settings.options.scanInterval, FR.Scan);
 				return;
 			end
 
@@ -450,6 +453,7 @@ FR.Scan = function ()
 		for index = 1, numTotal do
 			-- 12.0.0 Safety Gate (Secrets in Combat)
 			if InCombatLockdown() then
+				C_Timer.After(FriendAlertsDB.settings.options.scanInterval, FR.Scan);
 				return;
 			end
 			local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile, isSoREligible, standingID, playerGuid = GetGuildRosterInfo(index);

@@ -21,6 +21,9 @@
         "UIDropDownMenu_CreateInfo",
         "SlashCmdList",
         "DEFAULT_CHAT_FRAME",
-        "Settings"
+        "Settings",
+        "BATTLENET_FONT_COLOR",
+        "CopyTable",
+        "UIParent"
     ]
 }
