@@ -591,22 +591,6 @@ initFrame:SetScript("OnEvent", function(self, event, arg1)
 	end
 end)
 
--- Whisper frame
-local whisperFrame = CreateFrame("Frame")
-whisperFrame:RegisterEvent("CHAT_MSG_WHISPER")
-whisperFrame:RegisterEvent("CHAT_MSG_BN_WHISPER")
-
-whisperFrame:SetScript("OnEvent", function(self, event, msg, sender, _, _, _, _, _, _, _, _, _, presenceID)
-    if msg:lower() == "moo" then
-
-		local currentTime = time()
-		if currentTime - lastMooTime >= cooldown and FriendAlertsDB.settings.options.easterEggs then
-			PlaySoundFile("Interface/Addons/FriendAlerts/Media/Sounds/moo_custom_2.ogg", "Effects")
-			lastMooTime = currentTime
-		end
-
-    end
-end)
 
 -- Slash Commands
 SLASH_FRIENDALERTS1 = "/fa"
