@@ -1,4 +1,4 @@
-## Interface: 120007
+## Interface: 120010
 ## Title: FriendAlerts
 ## Version: @project-version@
 ## Author: Nick Stuer
